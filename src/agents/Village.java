@@ -7,11 +7,13 @@ import jade.core.Agent;
 import jade.domain.AMSService;
 import jade.domain.FIPAAgentManagement.AMSAgentDescription;
 import jade.domain.FIPAAgentManagement.SearchConstraints;
+import protocol.StartTradeMessage;
 import utils.Resource.ResourceType;
 
 import utils.Resource;
 import utils.Trade;
 
+import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
@@ -85,7 +87,13 @@ public class Village extends Agent {
     }
 
     public void broadcastTrade(Trade trade) {
+        try {
+            StartTradeMessage msg = new StartTradeMessage(trade);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
+        System.out.println("Broadcasting trade ...");
     }
 
     private int getRandomResourceProductionRate() {

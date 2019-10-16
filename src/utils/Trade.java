@@ -1,9 +1,10 @@
 package utils;
 
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
 
-public class Trade {
+public class Trade implements Serializable {
     private final List<Resource> request;
     private final List<Resource> offer;
 

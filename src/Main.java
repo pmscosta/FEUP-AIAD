@@ -1,4 +1,3 @@
-import agents.ListeningAgent;
 import agents.Village;
 import jade.core.*;
 import jade.core.Runtime;

@@ -2,6 +2,7 @@ package behaviour;
 
 import agents.Village;
 import utils.Resource;
+import utils.Trade;
 
 
 public class PassiveBehaviour extends TimeTickerBehaviour {
@@ -29,16 +30,16 @@ public class PassiveBehaviour extends TimeTickerBehaviour {
 
     @Override
     protected void onTick() {
-        System.out.println(village.getName());
+        System.out.println("\n" + village.getName());
         for (Resource r : village.getResources().values()) {
             System.out.println(r);
             if (r.getAmount() < RESOURCES_THRESHOLD) {
                 Resource most_abundant_resource = village.getMostAbundantResource();
                 int quantity = getTradeResourceQuantity(most_abundant_resource, r);
-                village.requestResource(
+                village.broadcastTrade(new Trade(
                         new Resource(r.getType(), quantity),
                         new Resource(most_abundant_resource.getType(), quantity)
-                );
+                ));
             }
         }
     }

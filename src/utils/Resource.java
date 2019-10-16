@@ -46,6 +46,6 @@ public class Resource {
     }
 
     public String toString(){
-        return "Resource: " + this.type.name() + " : " +  this.amount;
+        return String.format("%s: %s", this.type.name(), this.amount);
     }
 }

@@ -10,6 +10,7 @@ import jade.domain.FIPAAgentManagement.SearchConstraints;
 import utils.Resource.ResourceType;
 
 import utils.Resource;
+import utils.Trade;
 
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
@@ -83,7 +84,7 @@ public class Village extends Agent {
         return agents;
     }
 
-    public void requestResource(Resource request, Resource offer) {
+    public void broadcastTrade(Trade trade) {
 
     }
 

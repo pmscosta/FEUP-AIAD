@@ -1,21 +1,45 @@
 package utils;
 
+import exceptions.NotEnoughResources;
+
 public class Resource {
 
-    private String name;
+    private static final int DEFAULT_AMOUNT = 1000;
 
-    private Integer amount;
+    public enum ResourceType {
+        WOOD,
+        FOOD,
+        STONE,
+        CLAY
+    };
 
-    public Resource(String name, Integer amount){
-        this.name = name;
+    private ResourceType type;
+
+    private int amount;
+
+    public Resource(ResourceType type){
+        this(type, DEFAULT_AMOUNT);
+    }
+
+    public Resource(ResourceType type, int amount){
+        this.type = type;
         this.amount = amount;
     }
 
-    public Integer getAmount(){
+    public int getAmount(){
         return this.amount;
     }
 
-    public void subtractAmount(Integer sub){
-        this.amount -= sub;
+    public void consumeAmount(Integer sub) throws NotEnoughResources {
+
+        if(this.amount - sub < 0)
+            throw new NotEnoughResources("Tried to consume " + sub + " of " + this.type + " but only has " + this.amount);
+        else
+            this.amount -= sub;
+
+    }
+
+    public String toString(){
+        return "Resource: " + this.type.name() + " : " +  this.amount;
     }
 }

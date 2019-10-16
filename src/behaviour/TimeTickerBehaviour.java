@@ -7,7 +7,6 @@ import utils.Resource;
 public abstract class TimeTickerBehaviour extends TickerBehaviour {
 
     private static final int DEFAULT_TIME = 1000;
-
     final Village village;
 
     TimeTickerBehaviour(Village village) {
@@ -15,12 +14,13 @@ public abstract class TimeTickerBehaviour extends TickerBehaviour {
         this.village = village;
     }
 
-
     @Override
     protected void onTick() {
-        for (Resource r : this.village.getResources()) {
-            if (r.getAmount() <= 0)
+        for (Resource r : this.village.getResources().values()) {
+            if (r.getAmount() <= 0) {
                 this.village.doDelete();
+                break;
+            }
         }
 
     }

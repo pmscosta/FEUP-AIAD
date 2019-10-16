@@ -14,14 +14,13 @@ public class Resource {
     };
 
     private ResourceType type;
-
     private int amount;
 
     public Resource(ResourceType type){
         this(type, DEFAULT_AMOUNT);
     }
 
-    public Resource(ResourceType type, int amount){
+    public Resource(ResourceType type, int amount) {
         this.type = type;
         this.amount = amount;
     }
@@ -30,13 +29,20 @@ public class Resource {
         return this.amount;
     }
 
-    public void consumeAmount(Integer sub) throws NotEnoughResources {
+    public ResourceType getType() {
+        return type;
+    }
 
-        if(this.amount - sub < 0)
-            throw new NotEnoughResources("Tried to consume " + sub + " of " + this.type + " but only has " + this.amount);
-        else
-            this.amount -= sub;
+    public void consumeAmount(int amount) throws NotEnoughResources {
+        if (this.amount - amount < 0) {
+            throw new NotEnoughResources("Tried to consume " + amount + " of " + this.type + " but only has " + this.amount);
+        } else {
+            this.amount -= amount;
+        }
+    }
 
+    public void produceAmount(int amount) {
+        this.amount += amount;
     }
 
     public String toString(){

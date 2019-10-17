@@ -22,8 +22,8 @@ public class PassiveBehaviour extends TimeTickerBehaviour {
     }
 
     private int getTradeResourceQuantity(Resource request, Resource offer) {
-        int target_survival_quantity = (RESOURCES_THRESHOLD - request.getAmount())  + getTargetSurvivalQuantity();
-        int midpoint_quantity = Math.abs(RESOURCES_THRESHOLD - offer.getAmount())/2;
+        int target_survival_quantity = (RESOURCES_THRESHOLD - request.getAmount()) + getTargetSurvivalQuantity();
+        int midpoint_quantity = Math.abs(RESOURCES_THRESHOLD - offer.getAmount()) / 2;
 
         return Math.min(target_survival_quantity, midpoint_quantity);
     }

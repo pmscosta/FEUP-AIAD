@@ -7,18 +7,10 @@ import java.io.Serializable;
 public class Resource implements Serializable {
 
     private static final int DEFAULT_AMOUNT = 1000;
-
-    public enum ResourceType {
-        WOOD,
-        FOOD,
-        STONE,
-        CLAY
-    };
-
     private ResourceType type;
-    private int amount;
 
-    public Resource(ResourceType type){
+    private int amount;
+    public Resource(ResourceType type) {
         this(type, DEFAULT_AMOUNT);
     }
 
@@ -27,7 +19,7 @@ public class Resource implements Serializable {
         this.amount = amount;
     }
 
-    public int getAmount(){
+    public int getAmount() {
         return this.amount;
     }
 
@@ -47,7 +39,14 @@ public class Resource implements Serializable {
         this.amount += amount;
     }
 
-    public String toString(){
+    public String toString() {
         return String.format("%s: %s", this.type.name(), this.amount);
+    }
+
+    public enum ResourceType {
+        WOOD,
+        FOOD,
+        STONE,
+        CLAY
     }
 }

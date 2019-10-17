@@ -1,5 +1,6 @@
 import agents.Village;
-import jade.core.*;
+import jade.core.Profile;
+import jade.core.ProfileImpl;
 import jade.core.Runtime;
 import jade.wrapper.AgentController;
 import jade.wrapper.ContainerController;

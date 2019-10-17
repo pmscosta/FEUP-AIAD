@@ -8,9 +8,8 @@ import jade.domain.AMSService;
 import jade.domain.FIPAAgentManagement.AMSAgentDescription;
 import jade.domain.FIPAAgentManagement.SearchConstraints;
 import protocol.StartTradeMessage;
-import utils.Resource.ResourceType;
-
 import utils.Resource;
+import utils.Resource.ResourceType;
 import utils.Trade;
 
 import java.io.IOException;

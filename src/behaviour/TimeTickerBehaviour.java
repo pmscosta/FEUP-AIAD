@@ -2,7 +2,6 @@ package behaviour;
 
 import agents.Village;
 import jade.core.behaviours.TickerBehaviour;
-import utils.Resource;
 
 public abstract class TimeTickerBehaviour extends TickerBehaviour {
 

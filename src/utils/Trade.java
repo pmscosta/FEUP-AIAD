@@ -35,7 +35,7 @@ public class Trade implements Serializable {
 
     @Override
     public String toString() {
-        return "";
+        return "Request: " + request.toString() + "\tOffer: " + offer.toString();
     }
 }
 

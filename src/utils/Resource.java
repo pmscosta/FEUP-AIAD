@@ -6,7 +6,7 @@ import java.io.Serializable;
 
 public class Resource implements Serializable {
 
-    private static final int DEFAULT_AMOUNT = 1000;
+    private static final int DEFAULT_AMOUNT = 50;
     private ResourceType type;
 
     private int amount;

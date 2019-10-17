@@ -1,13 +1,14 @@
-package behaviour;
+package behaviour.passive;
 
 import agents.Village;
+import behaviour.TimeTickerBehaviour;
 import utils.Resource;
 import utils.Trade;
 
 
 public class PassiveBehaviour extends TimeTickerBehaviour {
 
-    private static final int RESOURCES_THRESHOLD = 100;
+    private static final int RESOURCES_THRESHOLD = 30;
 
     // The village will try to trade enough resources to survive for
     // 10 ticks ,based on the village resource consumption rate
@@ -32,15 +33,18 @@ public class PassiveBehaviour extends TimeTickerBehaviour {
     protected void onTick() {
         System.out.println("\n" + village.getName());
         for (Resource r : village.getResources().values()) {
-            System.out.println(r);
+            System.out.print(r + "\t");
             if (r.getAmount() < RESOURCES_THRESHOLD) {
                 Resource most_abundant_resource = village.getMostAbundantResource();
-                int quantity = getTradeResourceQuantity(most_abundant_resource, r);
+                System.out.print(most_abundant_resource + "\t");
+                int quantity = getTradeResourceQuantity(r, most_abundant_resource);
                 village.broadcastTrade(new Trade(
                         new Resource(r.getType(), quantity),
                         new Resource(most_abundant_resource.getType(), quantity)
                 ));
             }
         }
+
+        System.out.println("\n");
     }
 }

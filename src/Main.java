@@ -1,4 +1,5 @@
 import agents.Village;
+import agents.VillageType;
 import jade.core.Profile;
 import jade.core.ProfileImpl;
 import jade.core.Runtime;
@@ -60,7 +61,7 @@ public class Main {
                 production_resources.add(new Resource(Resource.ResourceType.STONE, Integer.parseInt(village_element.getElementsByTagName("stone_production_rate").item(0).getTextContent())));
                 production_resources.add(new Resource(Resource.ResourceType.WOOD, Integer.parseInt(village_element.getElementsByTagName("wood_production_rate").item(0).getTextContent())));
 
-                villages.add(new Village(name, consumption_rate, production_resources));
+                villages.add(new Village(name, VillageType.getVillageType(type), consumption_rate, production_resources));
             }
         }
 

@@ -21,26 +21,27 @@ public class Village extends Agent {
 
     private static final int DEFAULT_RESOURCE_CONSUMPTION = 5;
 
+    private final String name;
     private final int resource_consumption;
-    private List<Resource> production_resources;
+    private final List<Resource> production_resources;
     private HashMap<ResourceType, Resource> resources = new HashMap<ResourceType, Resource>() {{
-        put(ResourceType.WOOD, new Resource(ResourceType.WOOD));
-        put(ResourceType.STONE, new Resource(ResourceType.STONE));
-        put(ResourceType.FOOD, new Resource(ResourceType.FOOD));
         put(ResourceType.CLAY, new Resource(ResourceType.CLAY));
+        put(ResourceType.FOOD, new Resource(ResourceType.FOOD));
+        put(ResourceType.STONE, new Resource(ResourceType.STONE));
+        put(ResourceType.WOOD, new Resource(ResourceType.WOOD));
     }};
 
-    public Village() {
-        this(DEFAULT_RESOURCE_CONSUMPTION);
+    public Village(String name) {
+        this(name, DEFAULT_RESOURCE_CONSUMPTION);
     }
 
-    public Village(int resource_consumption) {
+    public Village(String name, int resource_consumption) {
+        this(name, resource_consumption, randomizeProduction(resource_consumption));
+    }
+
+    public Village(String name, int resource_consumption, List<Resource> production_resources) {
+        this.name = name;
         this.resource_consumption = resource_consumption;
-        this.randomizeProduction();
-    }
-
-    public Village(int resource_consumption, List<Resource> production_resources) {
-        this(resource_consumption);
         this.production_resources = production_resources;
     }
 
@@ -95,18 +96,22 @@ public class Village extends Agent {
         System.out.println("Broadcasting trade ...");
     }
 
-    private int getRandomResourceProductionRate() {
-        return ThreadLocalRandom.current().nextInt(this.resource_consumption + 5, this.resource_consumption + 20);
+    private static final int getRandomResourceProductionRate(int resource_consumption) {
+        return ThreadLocalRandom.current().nextInt(resource_consumption + 5, resource_consumption + 20);
     }
 
-    private void randomizeProduction() {
+    private static final List<Resource> randomizeProduction(int resource_consumption) {
         List<ResourceType> resource_types = Arrays.asList(ResourceType.values());
         int num_resources = ThreadLocalRandom.current().nextInt(1, resource_types.size());
         Collections.shuffle(resource_types);
-        this.production_resources = resource_types
+        return resource_types
                 .subList(0, num_resources)
                 .stream()
-                .map(type -> new Resource(type, this.getRandomResourceProductionRate()))
+                .map(type -> new Resource(type, getRandomResourceProductionRate(resource_consumption)))
                 .collect(Collectors.toList());
+    }
+
+    public String getVillageName() {
+        return this.name;
     }
 }

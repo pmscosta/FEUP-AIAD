@@ -44,9 +44,9 @@ public class Resource implements Serializable {
     }
 
     public enum ResourceType {
-        WOOD,
+        CLAY,
         FOOD,
         STONE,
-        CLAY
+        WOOD,
     }
 }

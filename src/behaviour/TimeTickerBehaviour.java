@@ -13,15 +13,4 @@ public abstract class TimeTickerBehaviour extends TickerBehaviour {
         super(village, DEFAULT_TIME);
         this.village = village;
     }
-
-    @Override
-    protected void onTick() {
-        for (Resource r : this.village.getResources().values()) {
-            if (r.getAmount() <= 0) {
-                this.village.doDelete();
-                break;
-            }
-        }
-
-    }
 }

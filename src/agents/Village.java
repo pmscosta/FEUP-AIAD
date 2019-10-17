@@ -6,6 +6,7 @@ import behaviour.passive.PassiveBehaviour;
 import behaviour.ProducingBehaviour;
 import behaviour.passive.PassiveHandler;
 import jade.core.Agent;
+import jade.core.behaviours.Behaviour;
 import jade.core.behaviours.CyclicBehaviour;
 import jade.domain.AMSService;
 import jade.domain.FIPAAgentManagement.AMSAgentDescription;
@@ -39,7 +40,6 @@ public class Village extends Agent {
         put(ResourceType.WOOD, new Resource(ResourceType.WOOD));
     }};
 
-    private Handler tradeHandler;
 
     public Village(String name) {
         this(name, DEFAULT_RESOURCE_CONSUMPTION);
@@ -65,55 +65,20 @@ public class Village extends Agent {
         addBehaviour(new PassiveBehaviour(this));
         addBehaviour(new ProducingBehaviour(this));
         addBehaviour(new ConsumingBehaviour(this));
-        addBehaviour(new TradeListenerBehaviour());
+        addBehaviour(createHandler());
     }
 
-    private void createHandler() {
+    private Handler createHandler() {
 
         switch (this.type) {
             case PASSIVE:
             default:
-                this.tradeHandler = new PassiveHandler(this);
-                break;
+                return new PassiveHandler(this);
             case AGGRESSIVE:
                 break;
         }
 
-    }
-
-    class TradeListenerBehaviour extends CyclicBehaviour {
-
-        public void action() {
-            ACLMessage msg = receive();
-            if (msg != null) {
-
-                try {
-                    dispatcher(msg);
-                } catch (IOException | UnreadableException e) {
-                    e.printStackTrace();
-                }
-
-
-            } else {
-                block();
-            }
-        }
-    }
-
-    private void dispatcher(ACLMessage msg) throws IOException, UnreadableException {
-
-        switch (msg.getPerformative()) {
-            case ACLMessage.PROPOSE:
-                this.tradeHandler.handleReceivedTrade(msg);
-                break;
-            case ACLMessage.ACCEPT_PROPOSAL:
-                this.tradeHandler.handleConfirmedTrade(msg);
-                break;
-            default:
-                System.out.println("UNRECOGNIZED MESSAGE");
-                break;
-        }
-
+        return new PassiveHandler(this);
     }
 
     public Resource getMostDepletedResource() {

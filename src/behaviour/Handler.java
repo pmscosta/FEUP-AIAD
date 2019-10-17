@@ -1,13 +1,7 @@
 package behaviour;
 
-import jade.lang.acl.ACLMessage;
-import jade.lang.acl.UnreadableException;
+import jade.core.behaviours.CyclicBehaviour;
 
-import java.io.IOException;
+public abstract class Handler extends CyclicBehaviour implements HandlerInterface {
 
-public interface Handler {
-
-    public void handleReceivedTrade(ACLMessage msg) throws UnreadableException, IOException;
-
-    public void handleConfirmedTrade(ACLMessage msg) throws UnreadableException;
 }

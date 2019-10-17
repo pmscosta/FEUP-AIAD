@@ -8,7 +8,7 @@ import utils.Trade;
 
 public class PassiveBehaviour extends TimeTickerBehaviour {
 
-    private static final int RESOURCES_THRESHOLD = 30;
+    private static final int RESOURCES_THRESHOLD = 45;
 
     // The village will try to trade enough resources to survive for
     // 10 ticks ,based on the village resource consumption rate

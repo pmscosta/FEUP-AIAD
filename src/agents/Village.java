@@ -1,13 +1,13 @@
 package agents;
 
-import behaviour.ConsumingBehaviour;
-import behaviour.PassiveBehaviour;
-import behaviour.ProducingBehaviour;
+import behaviour.*;
 import jade.core.Agent;
 import jade.domain.AMSService;
 import jade.domain.FIPAAgentManagement.AMSAgentDescription;
 import jade.domain.FIPAAgentManagement.SearchConstraints;
-import protocol.StartTradeMessage;
+import jade.lang.acl.ACLMessage;
+import jade.lang.acl.MessageTemplate;
+import protocol.ACLObjectMessage;
 import utils.Resource;
 import utils.Resource.ResourceType;
 import utils.Trade;
@@ -53,6 +53,9 @@ public class Village extends Agent {
         addBehaviour(new PassiveBehaviour(this));
         addBehaviour(new ProducingBehaviour(this));
         addBehaviour(new ConsumingBehaviour(this));
+
+        // TODO: Not match all :upside_down_smile:
+        addBehaviour(new HandleTradeBehaviour(this, MessageTemplate.MatchAll()));
     }
 
     public Resource getMostDepletedResource() {
@@ -87,13 +90,14 @@ public class Village extends Agent {
     }
 
     public void broadcastTrade(Trade trade) {
+        System.out.println("Sending trade ...");
+
         try {
-            StartTradeMessage msg = new StartTradeMessage(trade);
+            ACLObjectMessage msg = new ACLObjectMessage(ACLMessage.CFP, trade);
+            this.addBehaviour(new InitTradeBehaviour(this, msg));
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        System.out.println("Broadcasting trade ...");
     }
 
     private static final int getRandomResourceProductionRate(int resource_consumption) {

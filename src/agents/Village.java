@@ -1,6 +1,7 @@
 package agents;
 
 import behaviour.*;
+import exceptions.NotEnoughResources;
 import jade.core.Agent;
 import jade.domain.AMSService;
 import jade.domain.FIPAAgentManagement.AMSAgentDescription;
@@ -107,6 +108,22 @@ public class Village extends Agent {
         }
     }
 
+    /**
+     * Decides whether the given trade should be accepted or not. Override in subclasses to change the passive behaviour
+     * @param t The trade to decide acceptance of
+     * @return true if the trade should be accepted, false otherwise
+     */
+    public boolean wantToAcceptTrade(Trade t) {
+        return true;
+    }
+
+    public final boolean canAcceptTrade(Trade t) {
+        int have = this.resources.get(t.getRequest().getType()).getAmount();
+        int requested = t.getRequest().getAmount();
+        // TODO: Use threshold (did not use yet since it is necessary to migrate things via refactoring)
+        return have - requested > 0;
+    }
+
     private static final int getRandomResourceProductionRate(int resource_consumption) {
         return ThreadLocalRandom.current().nextInt(resource_consumption + 5, resource_consumption + 20);
     }
@@ -124,5 +141,36 @@ public class Village extends Agent {
 
     public String getVillageName() {
         return this.name;
+    }
+
+    // These two probably can be refactored but for the sake of finishing the MVP left them like this (basically they
+    // only flip the interpretation of offer and request)
+
+    public void doProposedTrade(Trade t) {
+        // I received what I requested
+        this.resources.get(t.getRequest().getType()).produceAmount(t.getRequest().getAmount());
+        try {
+            // And sent what I offered
+            this.resources.get(t.getOffer().getType()).consumeAmount(t.getOffer().getAmount());
+        } catch (NotEnoughResources e) {
+            // Never happens unless there are concurrency problems since canAcceptTrade has returned true before
+            e.printStackTrace();
+        }
+
+        System.out.println("As a proposer, just did this trade: " + t);
+    }
+
+    public void doAcceptedTrade(Trade t) {
+        // I received what I was offered
+        this.resources.get(t.getOffer().getType()).produceAmount(t.getOffer().getAmount());
+        try {
+            // And sent what I was requested
+            this.resources.get(t.getRequest().getType()).consumeAmount(t.getRequest().getAmount());
+        } catch (NotEnoughResources e) {
+            // Never happens unless there are concurrency problems since canAcceptTrade has returned true before
+            e.printStackTrace();
+        }
+
+        System.out.println("As a responder, just did this trade: " + t);
     }
 }

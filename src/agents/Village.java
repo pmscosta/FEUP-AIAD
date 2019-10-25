@@ -74,13 +74,16 @@ public class Village extends Agent {
         return production_resources;
     }
 
-    public AMSAgentDescription[] findVillages() {
+    public AMSAgentDescription[] findOtherVillages() {
 
         AMSAgentDescription[] agents = null;
         try {
             SearchConstraints c = new SearchConstraints();
-            c.setMaxResults(new Long(-1));
-            agents = AMSService.search(this, new AMSAgentDescription(), c);
+            c.setMaxResults((long) -1);
+            agents = Arrays.stream(AMSService.search(this, new AMSAgentDescription(), c))
+                    .filter(agentDescription -> !agentDescription.getName().equals(this.getAID()))
+                    .toArray(AMSAgentDescription[]::new);
+
         } catch (Exception e) {
             System.out.println("Problem searching AMS: " + e);
             e.printStackTrace();
@@ -94,6 +97,10 @@ public class Village extends Agent {
 
         try {
             ACLObjectMessage msg = new ACLObjectMessage(ACLMessage.CFP, trade);
+            for (AMSAgentDescription ad : this.findOtherVillages()) {
+                msg.addReceiver(ad.getName());
+            }
+
             this.addBehaviour(new InitTradeBehaviour(this, msg));
         } catch (IOException e) {
             e.printStackTrace();

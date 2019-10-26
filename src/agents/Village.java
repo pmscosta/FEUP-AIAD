@@ -18,6 +18,8 @@ import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
+import static utils.Printer.safePrintf;
+
 public class Village extends Agent {
 
     private static final int DEFAULT_RESOURCE_CONSUMPTION = 5;
@@ -56,7 +58,13 @@ public class Village extends Agent {
         addBehaviour(new ConsumingBehaviour(this));
 
         // TODO: Not match all :upside_down_smile:
-        addBehaviour(new HandleTradeBehaviour(this, MessageTemplate.MatchAll()));
+        MessageTemplate mt =
+                MessageTemplate.or(
+                        MessageTemplate.MatchPerformative(ACLMessage.CFP),
+                        MessageTemplate.MatchPerformative(ACLMessage.ACCEPT_PROPOSAL)
+                );
+
+        addBehaviour(new HandleTradeBehaviour(this, mt));
     }
 
     public Resource getMostDepletedResource() {
@@ -82,11 +90,16 @@ public class Village extends Agent {
             SearchConstraints c = new SearchConstraints();
             c.setMaxResults((long) -1);
             agents = Arrays.stream(AMSService.search(this, new AMSAgentDescription(), c))
-                    .filter(agentDescription -> !agentDescription.getName().equals(this.getAID()))
+                    .filter(agentDescription -> {
+                        return !agentDescription.getName().equals(this.getAID())
+                                &&
+                                !agentDescription.getName().getLocalName().equals("ams")
+                                &&
+                                !agentDescription.getName().getLocalName().equals("df");
+                    })
                     .toArray(AMSAgentDescription[]::new);
-
         } catch (Exception e) {
-            System.out.println("Problem searching AMS: " + e);
+            safePrintf("Problem searching AMS: " + e);
             e.printStackTrace();
         }
 
@@ -94,7 +107,7 @@ public class Village extends Agent {
     }
 
     public void broadcastTrade(Trade trade) {
-        System.out.println("Sending trade ...");
+        safePrintf(this.getLocalName() + " : Sending trade: %s", trade);
 
         try {
             ACLObjectMessage msg = new ACLObjectMessage(ACLMessage.CFP, trade);
@@ -110,6 +123,7 @@ public class Village extends Agent {
 
     /**
      * Decides whether the given trade should be accepted or not. Override in subclasses to change the passive behaviour
+     *
      * @param t The trade to decide acceptance of
      * @return true if the trade should be accepted, false otherwise
      */
@@ -157,7 +171,7 @@ public class Village extends Agent {
             e.printStackTrace();
         }
 
-        System.out.println("As a proposer, just did this trade: " + t);
+        safePrintf(this.getLocalName() + " : As a proposer, just did this trade: " + t);
     }
 
     public void doAcceptedTrade(Trade t) {
@@ -171,6 +185,6 @@ public class Village extends Agent {
             e.printStackTrace();
         }
 
-        System.out.println("As a responder, just did this trade: " + t);
+        safePrintf(this.getLocalName() + " : As a responder, just did this trade: " + t);
     }
 }

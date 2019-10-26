@@ -1,10 +1,16 @@
 package behaviour;
 
+import agents.Village;
 import jade.core.Agent;
 import jade.lang.acl.ACLMessage;
+import jade.lang.acl.UnreadableException;
 import jade.proto.ContractNetInitiator;
+import utils.Trade;
 
 import java.util.Vector;
+
+import static utils.Printer.safePrintf;
+import static utils.Printer.safePrintf;
 
 public class InitTradeBehaviour extends ContractNetInitiator {
 
@@ -17,8 +23,8 @@ public class InitTradeBehaviour extends ContractNetInitiator {
 
     @Override
     protected void handleAllResponses(Vector responses, Vector acceptances) {
-        System.out.println("Handling all responses:");
-        System.out.printf("Received %d responses.\n", responses.size());
+        safePrintf(this.myAgent.getLocalName() + " : Handling all responses:");
+        safePrintf(this.myAgent.getLocalName() + " : Received %d responses.\n", responses.size());
 
         boolean already_accepted = false;
 
@@ -34,5 +40,19 @@ public class InitTradeBehaviour extends ContractNetInitiator {
             }
             acceptances.add(reply);
         }
+    }
+
+    @Override
+    protected void handleAllResultNotifications(Vector resultNotifications) {
+
+        for (Object o : resultNotifications) {
+            ACLMessage notif = (ACLMessage) o;
+            try {
+                ((Village) this.myAgent).doProposedTrade((Trade) message.getContentObject());
+            } catch (UnreadableException e) {
+                e.printStackTrace();
+            }
+        }
+
     }
 }

@@ -2,7 +2,7 @@ package agents;
 
 import behaviour.ConsumingBehaviour;
 import behaviour.HandleTradeBehaviour;
-import behaviour.PassiveBehaviour;
+import behaviour.TradeProposalBehaviour;
 import behaviour.ProducingBehaviour;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
@@ -44,7 +44,7 @@ public class PassiveVillage extends Village {
 
     @Override
     public void setup() {
-        addBehaviour(new PassiveBehaviour(this));
+        addBehaviour(new TradeProposalBehaviour(this));
         addBehaviour(new ProducingBehaviour(this));
         addBehaviour(new ConsumingBehaviour(this));
 
@@ -64,7 +64,7 @@ public class PassiveVillage extends Village {
     }
 
     @Override
-    public void performTrade(Resource r) {
+    public void proposeTrade(Resource r) {
         Resource most_abundant_resource = getMostAbundantResource();
         int quantity = getTradeResourceQuantity(r, most_abundant_resource);
 

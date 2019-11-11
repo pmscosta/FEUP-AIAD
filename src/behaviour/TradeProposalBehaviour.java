@@ -6,9 +6,9 @@ import utils.Resource;
 import static utils.Printer.safePrintf;
 
 
-public class PassiveBehaviour extends TimeTickerBehaviour {
+public class TradeProposalBehaviour extends TimeTickerBehaviour {
 
-    public PassiveBehaviour(Village village) {
+    public TradeProposalBehaviour(Village village) {
         super(village);
     }
 
@@ -30,7 +30,7 @@ public class PassiveBehaviour extends TimeTickerBehaviour {
 
         for (Resource r : village.getResources().values()) {
             if (village.shouldProposeTrade(r)) {
-                village.performTrade(r);
+                village.proposeTrade(r);
             }
         }
     }

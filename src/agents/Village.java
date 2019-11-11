@@ -109,6 +109,6 @@ public abstract class Village extends BaseAgent {
      * Perform a trade on the given resource
      * @param r
      */
-    public abstract void performTrade(Resource r);
+    public abstract void proposeTrade(Resource r);
 
 }

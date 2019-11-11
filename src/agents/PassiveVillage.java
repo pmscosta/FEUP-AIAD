@@ -9,11 +9,12 @@ import jade.lang.acl.MessageTemplate;
 import utils.Resource;
 import utils.Trade;
 
+import java.sql.SQLOutput;
 import java.util.List;
 
 public class PassiveVillage extends Village {
 
-    private static final int RESOURCES_THRESHOLD = 995;
+    private static final int RESOURCES_THRESHOLD = 980;
 
     // The village will try to trade enough resources to survive for
     // 10 ticks ,based on the village resource consumption rate
@@ -66,7 +67,7 @@ public class PassiveVillage extends Village {
     @Override
     public void performTrade(Resource r) {
         Resource most_abundant_resource = getMostAbundantResource();
-        int quantity = getTradeResourceQuantity(most_abundant_resource, r);
+        int quantity = getTradeResourceQuantity(r, most_abundant_resource);
 
         broadcastTrade(new Trade(
                 new Resource(r.getType(), quantity),

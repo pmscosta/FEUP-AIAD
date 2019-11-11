@@ -5,7 +5,7 @@ import jade.core.behaviours.TickerBehaviour;
 
 public abstract class TimeTickerBehaviour extends TickerBehaviour {
 
-    private static final int DEFAULT_TIME = 4500;
+    private static final int DEFAULT_TIME = 3000;
     final Village village;
 
     TimeTickerBehaviour(Village village) {

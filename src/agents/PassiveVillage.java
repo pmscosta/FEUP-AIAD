@@ -60,7 +60,7 @@ public class PassiveVillage extends Village {
     }
 
     @Override
-    public boolean shouldPerformTrade(Resource r) {
+    public boolean shouldProposeTrade(Resource r) {
         return r.getAmount() < RESOURCES_THRESHOLD;
     }
 
@@ -78,5 +78,13 @@ public class PassiveVillage extends Village {
     @Override
     public boolean wantToAcceptTrade(Trade t) {
         return true;
+    }
+
+    @Override
+    public boolean canAcceptTrade(Trade t) {
+        int have = this.resources.get(t.getRequest().getType()).getAmount();
+        int requested = t.getRequest().getAmount();
+
+        return (have - requested) > RESOURCES_THRESHOLD;
     }
 }

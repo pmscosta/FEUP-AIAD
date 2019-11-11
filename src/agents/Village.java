@@ -18,7 +18,7 @@ public abstract class Village extends BaseAgent {
     private final String name;
     private final int resource_consumption;
     private final List<Resource> production_resources;
-    private HashMap<ResourceType, Resource> resources = new HashMap<ResourceType, Resource>() {{
+    protected HashMap<ResourceType, Resource> resources = new HashMap<ResourceType, Resource>() {{
         put(ResourceType.CLAY, new Resource(ResourceType.CLAY));
         put(ResourceType.FOOD, new Resource(ResourceType.FOOD));
         put(ResourceType.STONE, new Resource(ResourceType.STONE));
@@ -57,13 +57,6 @@ public abstract class Village extends BaseAgent {
 
     public List<Resource> getProductionResources() {
         return production_resources;
-    }
-
-    public final boolean canAcceptTrade(Trade t) {
-        int have = this.resources.get(t.getRequest().getType()).getAmount();
-        int requested = t.getRequest().getAmount();
-        // TODO: Use threshold (did not use yet since it is necessary to migrate things via refactoring)
-        return have - requested > 0;
     }
 
     private static final int getRandomResourceProductionRate(int resource_consumption) {
@@ -107,6 +100,13 @@ public abstract class Village extends BaseAgent {
     public abstract void setup();
 
     /**
+     * Verifies if trade can be accepted, according to the village's standards
+     * @param t
+     * @return true if trade can be accepted, false otherwise
+     */
+    public abstract boolean canAcceptTrade(Trade t);
+
+    /**
      * Decides whether the given trade should be accepted or not. Override in subclasses to change the passive behaviour
      *
      * @param t The trade to decide acceptance of
@@ -119,7 +119,7 @@ public abstract class Village extends BaseAgent {
      * @param r
      * @return true if should be performed, false otherwise
      */
-    public abstract boolean shouldPerformTrade(Resource r);
+    public abstract boolean shouldProposeTrade(Resource r);
 
     /**
      * Perform a trade on the given resource

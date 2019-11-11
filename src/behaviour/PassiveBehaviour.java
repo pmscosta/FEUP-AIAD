@@ -2,7 +2,6 @@ package behaviour;
 
 import agents.Village;
 import utils.Resource;
-import utils.Trade;
 
 import static utils.Printer.safePrintf;
 
@@ -30,7 +29,7 @@ public class PassiveBehaviour extends TimeTickerBehaviour {
         );
 
         for (Resource r : village.getResources().values()) {
-            if (village.shouldPerformTrade(r)) {
+            if (village.shouldProposeTrade(r)) {
                 village.performTrade(r);
             }
         }

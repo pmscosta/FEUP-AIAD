@@ -3,6 +3,8 @@ package utils;
 import jade.core.AID;
 import jade.domain.FIPAAgentManagement.AMSAgentDescription;
 
+import java.util.concurrent.ConcurrentHashMap;
+
 public class Printer {
 
     public void printAgents(AMSAgentDescription[] agents) {
@@ -18,4 +20,5 @@ public class Printer {
             System.out.println();
         }
     }
+
 }

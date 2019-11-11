@@ -15,7 +15,7 @@ public class InitTradeBehaviour extends ContractNetInitiator {
 
     private final ACLMessage message;
 
-    public InitTradeBehaviour(Agent agent, ACLMessage message) {
+    public InitTradeBehaviour(Agent agent, ACLMessage message)  {
         super(agent, message);
         this.message = message;
     }
@@ -32,6 +32,20 @@ public class InitTradeBehaviour extends ContractNetInitiator {
             ACLMessage response = (ACLMessage) response_obj;
             ACLMessage reply = response.createReply();
             if (response.getPerformative() == ACLMessage.PROPOSE && !already_accepted) {
+
+                Trade t = null;
+                try {
+                    t = (Trade) message.getContentObject();
+
+                    /*  start accounting for the promised quantity
+                     *  since we are the initiator, that resource is what we are offering
+                     */
+                    ((Village) this.myAgent).accountForNewTrade(t.getOffer());
+
+                } catch (UnreadableException e) {
+                    e.printStackTrace();
+                }
+
                 reply.setPerformative(ACLMessage.ACCEPT_PROPOSAL);
                 already_accepted = true;
             } else {

@@ -32,6 +32,13 @@ public class HandleTradeBehaviour extends ContractNetResponder {
 
             if (v.canAcceptTrade(t) && v.wantToAcceptTrade(t)) {
                 safePrintf(this.getAgent().getLocalName() + " : Can and want to accept!");
+
+
+                /*  start accounting for the promised quantity
+                 *  since we are the receiver, that resource is the request
+                 */
+                v.accountForNewTrade(t.getRequest());
+
                 ACLMessage reply = cfp.createReply();
                 reply.setPerformative(ACLMessage.PROPOSE);
                 reply.setContentObject(t); //TODO this is not needed since the initiator can keep count of the trade he proposed
@@ -67,7 +74,13 @@ public class HandleTradeBehaviour extends ContractNetResponder {
     @Override
     protected void handleRejectProposal(ACLMessage cfp, ACLMessage propose, ACLMessage reject) {
         safePrintf("My proposal was rejected... :c");
+
         // TODO: Free the "locked" resources
+        try {
+            ((Village) this.getAgent()).closeOpenTrade(((Trade) cfp.getContentObject()).getOffer());
+        } catch (UnreadableException e) {
+            e.printStackTrace();
+        }
         super.handleRejectProposal(cfp, propose, reject);
     }
 

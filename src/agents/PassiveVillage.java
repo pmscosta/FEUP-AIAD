@@ -68,6 +68,10 @@ public class PassiveVillage extends Village {
         Resource most_abundant_resource = getMostAbundantResource();
         int quantity = getTradeResourceQuantity(r, most_abundant_resource);
 
+        if(!this.canPromiseTrade(new Resource(r.getType(), quantity))){
+            return;
+        }
+
         broadcastTrade(new Trade(
                 new Resource(r.getType(), quantity),
                 new Resource(most_abundant_resource.getType(), quantity)
@@ -76,14 +80,11 @@ public class PassiveVillage extends Village {
 
     @Override
     public boolean wantToAcceptTrade(Trade t) {
-        return true;
-    }
 
-    @Override
-    public boolean canAcceptTrade(Trade t) {
         int have = this.resources.get(t.getRequest().getType()).getAmount();
         int requested = t.getRequest().getAmount();
 
         return (have - requested) > RESOURCES_THRESHOLD;
     }
+
 }

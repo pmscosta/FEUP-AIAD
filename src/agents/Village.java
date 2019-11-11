@@ -7,6 +7,7 @@ import utils.ResourceRandomizer;
 import utils.Trade;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 import static utils.Printer.safePrintf;
 
@@ -17,26 +18,70 @@ public abstract class Village extends BaseAgent {
     private final String name;
     private final int resource_consumption;
     private final List<Resource> production_resources;
-    protected HashMap<ResourceType, Resource> resources = new HashMap<ResourceType, Resource>() {{
+    HashMap<ResourceType, Resource> resources = new HashMap<ResourceType, Resource>() {{
         put(ResourceType.CLAY, new Resource(ResourceType.CLAY));
         put(ResourceType.FOOD, new Resource(ResourceType.FOOD));
         put(ResourceType.STONE, new Resource(ResourceType.STONE));
         put(ResourceType.WOOD, new Resource(ResourceType.WOOD));
     }};
 
-    public Village(String name) {
+    ConcurrentHashMap<ResourceType, Integer> openTrades = new ConcurrentHashMap<>();
+
+    public void printOpenTrades(){
+        openTrades.entrySet().forEach(entry->{
+            safePrintf("%s : %d", entry.getKey() ,entry.getValue());
+        });
+    }
+
+    Village(String name) {
         this(name, DEFAULT_RESOURCE_CONSUMPTION);
     }
 
-    public Village(String name, int resource_consumption) {
+    Village(String name, int resource_consumption) {
         this(name, resource_consumption, ResourceRandomizer.randomizeProduction(resource_consumption));
     }
 
-    public Village(String name, int resource_consumption, List<Resource> production_resources) {
+    Village(String name, int resource_consumption, List<Resource> production_resources) {
         this.name = name;
         this.resource_consumption = resource_consumption;
         this.production_resources = production_resources;
     }
+
+     public void accountForNewTrade(Resource r){
+
+        int new_quantity = r.getAmount();
+        ResourceType type = r.getType();
+        int curr_quantity = 0;
+
+        if(this.openTrades.containsKey(r.getType())){
+            curr_quantity += this.openTrades.get(type);
+        }
+
+        this.openTrades.put(type, curr_quantity + new_quantity);
+    }
+
+    public int getResourceQuantityInOpenTrades(ResourceType type) {
+        return this.openTrades.get(type);
+    }
+
+    public void closeOpenTrade(Resource r){
+        int curr_quantity = this.openTrades.get(r.getType());
+        this.openTrades.put(r.getType(), curr_quantity - r.getAmount());
+    }
+
+
+    public boolean canPromiseTrade(Resource r){
+        int lockedQuantity =0;
+
+        if(this.openTrades.containsKey(r.getType())) {
+            lockedQuantity += getResourceQuantityInOpenTrades(r.getType());
+        }
+
+        int totalLockedQuantity = lockedQuantity + r.getAmount();
+
+        return this.resources.get(r.getType()).getAmount() - totalLockedQuantity > 0;
+    }
+
 
     public int getResourceConsumption() {
         return resource_consumption;
@@ -66,6 +111,8 @@ public abstract class Village extends BaseAgent {
         Resource request = is_proposer ? t.getRequest() : t.getOffer();
         Resource offer = is_proposer ? t.getOffer() : t.getRequest();
 
+        this.closeOpenTrade(is_proposer ? t.getOffer() : t.getRequest());
+
         try {
             this.resources.get(t.getRequest().getType()).produceAmount(request.getAmount());
             this.resources.get(t.getOffer().getType()).consumeAmount(offer.getAmount());
@@ -88,7 +135,9 @@ public abstract class Village extends BaseAgent {
      * @param t
      * @return true if trade can be accepted, false otherwise
      */
-    public abstract boolean canAcceptTrade(Trade t);
+    public boolean canAcceptTrade(Trade t){
+        return canPromiseTrade(t.getRequest());
+    }
 
     /**
      * Decides whether the given trade should be accepted or not. Override in subclasses to change the passive behaviour

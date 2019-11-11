@@ -14,7 +14,7 @@ import java.util.Arrays;
 
 import static utils.Printer.safePrintf;
 
-public class BaseAgent extends Agent {
+public abstract class BaseAgent extends Agent {
 
     /**
      * Finds all agents EXCEPT itself and the "special-kind-of-special" ones

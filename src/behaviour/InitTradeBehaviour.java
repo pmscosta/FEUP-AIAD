@@ -48,7 +48,7 @@ public class InitTradeBehaviour extends ContractNetInitiator {
         for (Object o : resultNotifications) {
             ACLMessage notif = (ACLMessage) o;
             try {
-                ((Village) this.myAgent).doProposedTrade((Trade) message.getContentObject());
+                ((Village) this.myAgent).applyTrade((Trade) message.getContentObject(), true);
             } catch (UnreadableException e) {
                 e.printStackTrace();
             }

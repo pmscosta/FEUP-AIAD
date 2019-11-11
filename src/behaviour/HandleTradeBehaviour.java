@@ -50,10 +50,10 @@ public class HandleTradeBehaviour extends ContractNetResponder {
     @Override
     protected ACLMessage handleAcceptProposal(ACLMessage cfp, ACLMessage propose, ACLMessage accept) throws FailureException {
         safePrintf(this.getAgent().getLocalName() + " : My proposal was accepted!");
+
         try {
             Trade t = (Trade) cfp.getContentObject();
-            ((Village) this.getAgent()).doAcceptedTrade(t);
-
+            ((Village) this.getAgent()).applyTrade(t, false);
         } catch (UnreadableException e) {
             safePrintf("Could not cast received accept proposal's content object to a Trade!");
             e.printStackTrace();

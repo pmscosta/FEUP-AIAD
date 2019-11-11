@@ -85,35 +85,20 @@ public abstract class Village extends BaseAgent {
         return this.name;
     }
 
-    // These two probably can be refactored but for the sake of finishing the MVP left them like this (basically they
-    // only flip the interpretation of offer and request)
+    public void applyTrade(Trade t, boolean is_proposer) {
+        Resource request = is_proposer ? t.getRequest() : t.getOffer();
+        Resource offer = is_proposer ? t.getOffer() : t.getRequest();
 
-    public void doProposedTrade(Trade t) {
-        // I received what I requested
-        this.resources.get(t.getRequest().getType()).produceAmount(t.getRequest().getAmount());
         try {
-            // And sent what I offered
-            this.resources.get(t.getOffer().getType()).consumeAmount(t.getOffer().getAmount());
+            this.resources.get(t.getRequest().getType()).produceAmount(request.getAmount());
+            this.resources.get(t.getOffer().getType()).consumeAmount(offer.getAmount());
         } catch (NotEnoughResources e) {
             // Never happens unless there are concurrency problems since canAcceptTrade has returned true before
             e.printStackTrace();
         }
 
-        safePrintf(this.getLocalName() + " : As a proposer, just did this trade: " + t);
-    }
-
-    public void doAcceptedTrade(Trade t) {
-        // I received what I was offered
-        this.resources.get(t.getOffer().getType()).produceAmount(t.getOffer().getAmount());
-        try {
-            // And sent what I was requested
-            this.resources.get(t.getRequest().getType()).consumeAmount(t.getRequest().getAmount());
-        } catch (NotEnoughResources e) {
-            // Never happens unless there are concurrency problems since canAcceptTrade has returned true before
-            e.printStackTrace();
-        }
-
-        safePrintf(this.getLocalName() + " : As a responder, just did this trade: " + t);
+        safePrintf("%s: As a %s, just did this trade:", getVillageName(), is_proposer ? "proposer" : "responder");
+        safePrintf(t.toString());
     }
 
     /**

@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 
 import static utils.Printer.safePrintf;
 
-public class Village extends Agent {
+public class Village extends BaseAgent {
 
     private static final int DEFAULT_RESOURCE_CONSUMPTION = 5;
 
@@ -81,44 +81,6 @@ public class Village extends Agent {
 
     public List<Resource> getProductionResources() {
         return production_resources;
-    }
-
-    public AMSAgentDescription[] findOtherVillages() {
-
-        AMSAgentDescription[] agents = null;
-        try {
-            SearchConstraints c = new SearchConstraints();
-            c.setMaxResults((long) -1);
-            agents = Arrays.stream(AMSService.search(this, new AMSAgentDescription(), c))
-                    .filter(agentDescription -> {
-                        return !agentDescription.getName().equals(this.getAID())
-                                &&
-                                !agentDescription.getName().getLocalName().equals("ams")
-                                &&
-                                !agentDescription.getName().getLocalName().equals("df");
-                    })
-                    .toArray(AMSAgentDescription[]::new);
-        } catch (Exception e) {
-            safePrintf("Problem searching AMS: " + e);
-            e.printStackTrace();
-        }
-
-        return agents;
-    }
-
-    public void broadcastTrade(Trade trade) {
-        safePrintf(this.getLocalName() + " : Sending trade: %s", trade);
-
-        try {
-            ACLObjectMessage msg = new ACLObjectMessage(ACLMessage.CFP, trade);
-            for (AMSAgentDescription ad : this.findOtherVillages()) {
-                msg.addReceiver(ad.getName());
-            }
-
-            this.addBehaviour(new InitTradeBehaviour(this, msg));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     /**

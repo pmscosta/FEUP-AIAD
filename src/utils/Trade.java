@@ -1,41 +1,27 @@
 package utils;
 
 import java.io.Serializable;
-import java.util.Arrays;
-import java.util.List;
 
 public class Trade implements Serializable {
-    private final List<Resource> request;
-    private final List<Resource> offer;
+    private final Resource request;
+    private final Resource offer;
 
     public Trade(Resource request, Resource offer) {
-        this(Arrays.asList(request), Arrays.asList(offer));
-    }
-
-    public Trade(Resource request, List<Resource> offer) {
-        this(Arrays.asList(request), offer);
-    }
-
-    public Trade(List<Resource> request, Resource offer) {
-        this(request, Arrays.asList(offer));
-    }
-
-    public Trade(List<Resource> request, List<Resource> offer) {
         this.request = request;
         this.offer = offer;
     }
 
-    public List<Resource> getOffer() {
+    public Resource getOffer() {
         return offer;
     }
 
-    public List<Resource> getRequest() {
+    public Resource getRequest() {
         return request;
     }
 
     @Override
     public String toString() {
-        return "";
+        return String.format("Offering '%s' - Want '%s'", this.offer, this.request);
     }
 }
 

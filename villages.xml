@@ -6,17 +6,17 @@
         <consumption_rate>10</consumption_rate>
         <clay_production_rate>15</clay_production_rate>
         <food_production_rate>0</food_production_rate>
-        <stone_production_rate>5</stone_production_rate>
+        <stone_production_rate>15</stone_production_rate>
         <wood_production_rate>20</wood_production_rate>
     </village>
 
     <village>
         <name>Lectus</name>
         <type>Passive</type>
-        <consumption_rate>6</consumption_rate>
-        <clay_production_rate>12</clay_production_rate>
-        <food_production_rate>24</food_production_rate>
+        <consumption_rate>5</consumption_rate>
+        <clay_production_rate>15</clay_production_rate>
+        <food_production_rate>25</food_production_rate>
         <stone_production_rate>0</stone_production_rate>
-        <wood_production_rate>0</wood_production_rate>
+        <wood_production_rate>15</wood_production_rate>
     </village>
 </villages>

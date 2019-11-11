@@ -5,7 +5,6 @@ import exceptions.NotEnoughResources;
 import utils.Resource;
 
 import static utils.Printer.safePrintf;
-import static utils.Printer.safePrintf;
 
 public class ConsumingBehaviour extends TimeTickerBehaviour {
 

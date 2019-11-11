@@ -10,7 +10,6 @@ import utils.Trade;
 import java.util.Vector;
 
 import static utils.Printer.safePrintf;
-import static utils.Printer.safePrintf;
 
 public class InitTradeBehaviour extends ContractNetInitiator {
 

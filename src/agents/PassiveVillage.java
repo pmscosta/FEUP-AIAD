@@ -9,7 +9,6 @@ import jade.lang.acl.MessageTemplate;
 import utils.Resource;
 import utils.Trade;
 
-import java.sql.SQLOutput;
 import java.util.List;
 
 public class PassiveVillage extends Village {

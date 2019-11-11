@@ -1,7 +1,6 @@
 package protocol;
 
 import jade.lang.acl.ACLMessage;
-import utils.Trade;
 
 import java.io.IOException;
 import java.io.Serializable;

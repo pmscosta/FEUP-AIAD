@@ -3,11 +3,10 @@ package agents;
 import exceptions.NotEnoughResources;
 import utils.Resource;
 import utils.Resource.ResourceType;
+import utils.ResourceRandomizer;
 import utils.Trade;
 
 import java.util.*;
-import java.util.concurrent.ThreadLocalRandom;
-import java.util.stream.Collectors;
 
 import static utils.Printer.safePrintf;
 
@@ -30,7 +29,7 @@ public abstract class Village extends BaseAgent {
     }
 
     public Village(String name, int resource_consumption) {
-        this(name, resource_consumption, randomizeProduction(resource_consumption));
+        this(name, resource_consumption, ResourceRandomizer.randomizeProduction(resource_consumption));
     }
 
     public Village(String name, int resource_consumption, List<Resource> production_resources) {
@@ -57,21 +56,6 @@ public abstract class Village extends BaseAgent {
 
     public List<Resource> getProductionResources() {
         return production_resources;
-    }
-
-    private static final int getRandomResourceProductionRate(int resource_consumption) {
-        return ThreadLocalRandom.current().nextInt(resource_consumption + 5, resource_consumption + 20);
-    }
-
-    private static final List<Resource> randomizeProduction(int resource_consumption) {
-        List<ResourceType> resource_types = Arrays.asList(ResourceType.values());
-        int num_resources = ThreadLocalRandom.current().nextInt(1, resource_types.size());
-        Collections.shuffle(resource_types);
-        return resource_types
-                .subList(0, num_resources)
-                .stream()
-                .map(type -> new Resource(type, getRandomResourceProductionRate(resource_consumption)))
-                .collect(Collectors.toList());
     }
 
     public String getVillageName() {

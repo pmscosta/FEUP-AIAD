@@ -9,6 +9,7 @@ import jade.lang.acl.MessageTemplate;
 import utils.Resource;
 import utils.Trade;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class PassiveVillage extends Village {
@@ -81,6 +82,11 @@ public class PassiveVillage extends Village {
         int requested = t.getRequest().getAmount();
 
         return (have - requested) > RESOURCES_THRESHOLD;
+    }
+
+    @Override
+    public int selectBestTrade(List<Trade> trades){
+        return 0;
     }
 
 }

@@ -111,6 +111,9 @@ public abstract class Village extends BaseAgent {
         Resource request = is_proposer ? t.getRequest() : t.getOffer();
         Resource offer = is_proposer ? t.getOffer() : t.getRequest();
 
+        /*
+         * free the locked resource in the open trades
+         */
         this.closeOpenTrade(is_proposer ? t.getOffer() : t.getRequest());
 
         try {
@@ -153,6 +156,8 @@ public abstract class Village extends BaseAgent {
      * @return true if should be performed, false otherwise
      */
     public abstract boolean shouldProposeTrade(Resource r);
+
+    public abstract int selectBestTrade(List<Trade> trades);
 
     public abstract Trade createProposingTrade(Resource r);
 

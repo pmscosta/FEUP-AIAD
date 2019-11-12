@@ -50,7 +50,7 @@ public class HandleTradeBehaviour extends ContractNetResponder {
             throw new NotUnderstoodException("Content Object not Trade");
         }
 
-        safePrintf("Not accepting the trade");
+        safePrintf(this.getAgent().getLocalName() + " : Not accepting the trade");
         throw new RefuseException("Sorry, don't want to/can't accept the Trade at the moment :c");
     }
 

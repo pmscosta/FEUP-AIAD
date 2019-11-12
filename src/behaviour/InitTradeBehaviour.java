@@ -57,18 +57,17 @@ public class InitTradeBehaviour extends ContractNetInitiator {
         for(int i = 0; i < proposed_messages.size(); i++){
 
             ACLMessage acl_message = proposed_messages.get(i);
+            ACLMessage reply = acl_message.createReply();
 
             if(i == accepted_index){
-                acl_message.setPerformative(ACLMessage.ACCEPT_PROPOSAL);
+                reply.setPerformative(ACLMessage.ACCEPT_PROPOSAL);
                 ((Village) this.myAgent).accountForNewTrade(proposed_trades.get(accepted_index).getOffer());
             }else{
-                acl_message.setPerformative(ACLMessage.REJECT_PROPOSAL);
+                reply.setPerformative(ACLMessage.REJECT_PROPOSAL);
             }
 
-            acceptances.add(acl_message);
+            acceptances.add(reply);
         }
-
-        safePrintf("here");
     }
 
     @Override

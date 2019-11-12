@@ -3,20 +3,30 @@
     <village>
         <name>Portus</name>
         <type>Passive</type>
-        <consumption_rate>10</consumption_rate>
-        <clay_production_rate>15</clay_production_rate>
-        <food_production_rate>0</food_production_rate>
-        <stone_production_rate>15</stone_production_rate>
-        <wood_production_rate>20</wood_production_rate>
+        <consumption_rate>5</consumption_rate>
+        <clay_production_rate>0</clay_production_rate>
+        <food_production_rate>10</food_production_rate>
+        <stone_production_rate>10</stone_production_rate>
+        <wood_production_rate>10</wood_production_rate>
     </village>
 
     <village>
         <name>Lectus</name>
         <type>Passive</type>
         <consumption_rate>5</consumption_rate>
-        <clay_production_rate>15</clay_production_rate>
-        <food_production_rate>25</food_production_rate>
+        <clay_production_rate>10</clay_production_rate>
+        <food_production_rate>0</food_production_rate>
+        <stone_production_rate>10</stone_production_rate>
+        <wood_production_rate>10</wood_production_rate>
+    </village>
+
+    <village>
+        <name>Visengard</name>
+        <type>Passive</type>
+        <consumption_rate>5</consumption_rate>
+        <clay_production_rate>10</clay_production_rate>
+        <food_production_rate>10</food_production_rate>
         <stone_production_rate>0</stone_production_rate>
-        <wood_production_rate>15</wood_production_rate>
+        <wood_production_rate>10</wood_production_rate>
     </village>
 </villages>

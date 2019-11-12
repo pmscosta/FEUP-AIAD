@@ -14,7 +14,7 @@ import java.util.List;
 
 public class PassiveVillage extends Village {
 
-    private static final int RESOURCES_THRESHOLD = 980;
+    private static final int RESOURCES_THRESHOLD = 40;
 
     // The village will try to trade enough resources to survive for
     // 10 ticks ,based on the village resource consumption rate

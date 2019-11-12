@@ -73,14 +73,14 @@ public class HandleTradeBehaviour extends ContractNetResponder {
 
     @Override
     protected void handleRejectProposal(ACLMessage cfp, ACLMessage propose, ACLMessage reject) {
-        safePrintf("My proposal was rejected... :c");
+        safePrintf(this.getAgent().getLocalName() + " : My proposal was rejected... :c");
 
         // TODO: Free the "locked" resources
-        try {
+/*        try {
             ((Village) this.getAgent()).closeOpenTrade(((Trade) cfp.getContentObject()).getOffer());
         } catch (UnreadableException e) {
             e.printStackTrace();
-        }
+        }*/
         super.handleRejectProposal(cfp, propose, reject);
     }
 

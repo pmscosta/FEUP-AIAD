@@ -89,4 +89,10 @@ public class PassiveVillage extends Village {
         return 0;
     }
 
+    @Override
+    public Trade decideCounterPropose(Trade t) {
+        // Passive Village offer a counter_propose equal to the original propose
+        return t;
+    }
+
 }

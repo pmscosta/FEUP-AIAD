@@ -41,7 +41,10 @@ public class HandleTradeBehaviour extends ContractNetResponder {
 
                 ACLMessage reply = cfp.createReply();
                 reply.setPerformative(ACLMessage.PROPOSE);
-                reply.setContentObject(t); //TODO this is not needed since the initiator can keep count of the trade he proposed
+
+                Trade counter_propose = v.decideCounterPropose(t);
+
+                reply.setContentObject(counter_propose); //TODO this is not needed since the initiator can keep count of the trade he proposed
                 return reply;
             }
         } catch (UnreadableException | IOException e) {

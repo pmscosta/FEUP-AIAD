@@ -18,7 +18,7 @@ public abstract class Village extends BaseAgent {
     private final String name;
     private final int resource_consumption;
     private final List<Resource> production_resources;
-    ConcurrentHashMap<ResourceType, Resource> resources = new ConcurrentHashMap<>() {{
+    ConcurrentHashMap<ResourceType, Resource> resources = new ConcurrentHashMap<ResourceType, Resource>() {{ // Cannot have anonymous inner class in order to be compliant with Java 8
         put(ResourceType.CLAY, new Resource(ResourceType.CLAY));
         put(ResourceType.FOOD, new Resource(ResourceType.FOOD));
         put(ResourceType.STONE, new Resource(ResourceType.STONE));
@@ -128,6 +128,16 @@ public abstract class Village extends BaseAgent {
         safePrintf(t.toString());
     }
 
+    public void proposeTrade(Resource r) {
+        Trade t = createProposingTrade(r);
+
+        if(!this.canPromiseTrade(t.getOffer())){
+            return;
+        }
+
+        broadcastTrade(t);
+    }
+
     /**
      * Sets up the Villages behaviours
      */
@@ -157,18 +167,24 @@ public abstract class Village extends BaseAgent {
      */
     public abstract boolean shouldProposeTrade(Resource r);
 
+    /**
+     * Selects the best trade based of the received counter proposals
+     * @param trades
+     * @return Best trade
+     */
     public abstract int selectBestTrade(List<Trade> trades);
 
+    /**
+     * Create a trade to broadcast to other villages
+     * @param r Resource to request
+     * @return Trade to broadcast
+     */
     public abstract Trade createProposingTrade(Resource r);
 
-
-    public void proposeTrade(Resource r) {
-        Trade t = createProposingTrade(r);
-
-        if(!this.canPromiseTrade(t.getOffer())){
-            return;
-        }
-
-        broadcastTrade(t);
-    }
+    /**
+     * Decide a counter propose for a given received trade proposal
+     * @param t Received trade proposal
+     * @return Trade counter proposal
+     */
+    public abstract Trade decideCounterPropose(Trade t);
 }

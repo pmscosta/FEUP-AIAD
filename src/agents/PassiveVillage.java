@@ -64,18 +64,14 @@ public class PassiveVillage extends Village {
     }
 
     @Override
-    public void proposeTrade(Resource r) {
+    public Trade createProposingTrade(Resource r){
+
         Resource most_abundant_resource = getMostAbundantResource();
         int quantity = getTradeResourceQuantity(r, most_abundant_resource);
 
-        if(!this.canPromiseTrade(new Resource(r.getType(), quantity))){
-            return;
-        }
-
-        broadcastTrade(new Trade(
+        return new Trade(
                 new Resource(r.getType(), quantity),
-                new Resource(most_abundant_resource.getType(), quantity)
-        ));
+                new Resource(most_abundant_resource.getType(), quantity));
     }
 
     @Override

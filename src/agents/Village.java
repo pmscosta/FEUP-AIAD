@@ -18,7 +18,7 @@ public abstract class Village extends BaseAgent {
     private final String name;
     private final int resource_consumption;
     private final List<Resource> production_resources;
-    HashMap<ResourceType, Resource> resources = new HashMap<ResourceType, Resource>() {{
+    ConcurrentHashMap<ResourceType, Resource> resources = new ConcurrentHashMap<>() {{
         put(ResourceType.CLAY, new Resource(ResourceType.CLAY));
         put(ResourceType.FOOD, new Resource(ResourceType.FOOD));
         put(ResourceType.STONE, new Resource(ResourceType.STONE));
@@ -71,7 +71,7 @@ public abstract class Village extends BaseAgent {
 
 
     public boolean canPromiseTrade(Resource r){
-        int lockedQuantity =0;
+        int lockedQuantity = 0;
 
         if(this.openTrades.containsKey(r.getType())) {
             lockedQuantity += getResourceQuantityInOpenTrades(r.getType());
@@ -95,7 +95,7 @@ public abstract class Village extends BaseAgent {
         return this.getResources().values().stream().max(Comparator.comparing(Resource::getAmount)).orElse(null);
     }
 
-    public HashMap<ResourceType, Resource> getResources() {
+    public ConcurrentHashMap<ResourceType, Resource> getResources() {
         return this.resources;
     }
 
@@ -154,10 +154,16 @@ public abstract class Village extends BaseAgent {
      */
     public abstract boolean shouldProposeTrade(Resource r);
 
-    /**
-     * Perform a trade on the given resource
-     * @param r
-     */
-    public abstract void proposeTrade(Resource r);
+    public abstract Trade createProposingTrade(Resource r);
 
+
+    public void proposeTrade(Resource r) {
+        Trade t = createProposingTrade(r);
+
+        if(!this.canPromiseTrade(t.getOffer())){
+            return;
+        }
+
+        broadcastTrade(t);
+    }
 }

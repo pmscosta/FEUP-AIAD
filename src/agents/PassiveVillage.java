@@ -9,6 +9,8 @@ import utils.Trade;
 
 import java.util.List;
 
+import static utils.Printer.safePrintf;
+
 public class PassiveVillage extends Village {
 
     private static final int RESOURCES_THRESHOLD = 40;
@@ -75,6 +77,9 @@ public class PassiveVillage extends Village {
 
         int have = this.resources.get(t.getRequest().getType()).getAmount();
         int requested = t.getRequest().getAmount();
+
+        if((have - requested) <= RESOURCES_THRESHOLD)
+            safePrintf("\t\t\twantToAcceptTrade stopped the trade");
 
         return (have - requested) > RESOURCES_THRESHOLD;
     }

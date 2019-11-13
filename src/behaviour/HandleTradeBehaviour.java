@@ -78,22 +78,12 @@ public class HandleTradeBehaviour extends ContractNetResponder {
     protected void handleRejectProposal(ACLMessage cfp, ACLMessage propose, ACLMessage reject) {
         safePrintf(this.getAgent().getLocalName() + " : My proposal was rejected... :c");
 
-        // TODO: Free the "locked" resources
-/*        try {
-            ((Village) this.getAgent()).closeOpenTrade(((Trade) cfp.getContentObject()).getOffer());
+        try {
+            ((Village) this.getAgent()).closeOpenTrade(((Trade) cfp.getContentObject()).getRequest());
         } catch (UnreadableException e) {
             e.printStackTrace();
-        }*/
+        }
         super.handleRejectProposal(cfp, propose, reject);
     }
 
-    private void closeNegotiation(ACLMessage cfp, boolean success){
-
-        ACLMessage reply = cfp.createReply();
-
-        reply.setPerformative(success ? ACLMessage.INFORM : ACLMessage.FAILURE);
-
-        this.myAgent.send(reply);
-
-    }
 }

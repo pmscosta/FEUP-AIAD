@@ -8,6 +8,7 @@ import jade.proto.ContractNetInitiator;
 import utils.Trade;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Vector;
 
@@ -21,6 +22,24 @@ public class InitTradeBehaviour extends ContractNetInitiator {
         super(agent, message);
         this.message = message;
     }
+
+/*    @Override
+    protected void handlePropose(ACLMessage propose, Vector acceptances) {
+        super.handlePropose(propose, acceptances);
+        safePrintf("\t\t\t PROPOSE:  %s : %s", this.myAgent.getLocalName(), propose.getSender().getLocalName());
+    }
+
+    @Override
+    protected void handleRefuse(ACLMessage refuse) {
+        super.handleRefuse(refuse);
+        safePrintf("\t\t\t REFUSE:  %s : %s", this.myAgent.getLocalName(), refuse.getSender().getLocalName());
+    }
+
+    @Override
+    protected void handleNotUnderstood(ACLMessage notUnderstood) {
+        super.handleNotUnderstood(notUnderstood);
+        safePrintf("\t\t\t NOT UNDERSTOOD:  %s : %s", this.myAgent.getLocalName(), notUnderstood.getSender().getLocalName());
+    }*/
 
     @Override
     protected void handleAllResponses(Vector responses, Vector acceptances) {
@@ -46,10 +65,10 @@ public class InitTradeBehaviour extends ContractNetInitiator {
                     e.printStackTrace();
                 }
 
-            } else {
+            } /*else {
                 reply.setPerformative(ACLMessage.REJECT_PROPOSAL);
                 acceptances.add(reply);
-            }
+            }*/
         }
 
         int accepted_index = ((Village) this.myAgent).selectBestTrade(proposed_trades);
@@ -75,10 +94,23 @@ public class InitTradeBehaviour extends ContractNetInitiator {
 
         for (Object o : resultNotifications) {
             ACLMessage notif = (ACLMessage) o;
-            try {
-                ((Village) this.myAgent).applyTrade((Trade) message.getContentObject(), true);
-            } catch (UnreadableException e) {
-                e.printStackTrace();
+
+            if(notif.getPerformative() == ACLMessage.INFORM) {
+                try {
+                    ((Village) this.myAgent).applyTrade((Trade) message.getContentObject(), true);
+                } catch (UnreadableException e) {
+                    e.printStackTrace();
+                }
+            }
+            else if(notif.getPerformative() == ACLMessage.FAILURE){
+
+                try {
+                    Trade t = (Trade) message.getContentObject();
+
+                    ((Village) this.myAgent).closeOpenTrade(t.getOffer());
+                } catch (UnreadableException e) {
+                    e.printStackTrace();
+                }
             }
         }
 

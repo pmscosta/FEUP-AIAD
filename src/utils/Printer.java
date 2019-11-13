@@ -16,8 +16,10 @@ public class Printer {
 
     public static void safePrintf(String fmt, Object... args) {
         synchronized (System.out) {
-            System.out.printf(fmt, args);
-            System.out.println();
+            //if (args.length > 0 && args[0].equals("Portus")) {
+                System.out.printf(fmt, args);
+                System.out.println();
+            //}
         }
     }
 

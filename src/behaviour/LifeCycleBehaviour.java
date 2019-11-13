@@ -41,7 +41,7 @@ public class LifeCycleBehaviour extends TimeTickerBehaviour {
 
     public void logStuff() {
         ResourceLogger.getInstance().add(String.format(
-                "%d %s %d %d %d %d (%d)\n",
+                "%d %s %d %d %d %d (%d) - [%s]\n",
                 this.village.tick_num++,
                 this.village.getVillageName(),
                 this.village.getResources().get(Resource.ResourceType.STONE).getAmount(),
@@ -51,7 +51,9 @@ public class LifeCycleBehaviour extends TimeTickerBehaviour {
                 this.village.getResources().get(Resource.ResourceType.STONE).getAmount()+
                         this.village.getResources().get(Resource.ResourceType.WOOD).getAmount()+
                         this.village.getResources().get(Resource.ResourceType.FOOD).getAmount()+
-                        this.village.getResources().get(Resource.ResourceType.CLAY).getAmount()
+                        this.village.getResources().get(Resource.ResourceType.CLAY).getAmount(),
+                this.village.printOpenTrades()
+
         ));
 
         safePrintf("%s: %s-(%d) %s-(%d) %s-(%d) %s-(%d)", this.village.getVillageName(),

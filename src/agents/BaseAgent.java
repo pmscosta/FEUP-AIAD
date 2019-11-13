@@ -11,6 +11,7 @@ import utils.Trade;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Date;
 
 import static utils.Printer.safePrintf;
 
@@ -52,6 +53,11 @@ public abstract class BaseAgent extends Agent {
             for (AMSAgentDescription ad : this.getOtherAgents()) {
                 msg.addReceiver(ad.getName());
             }
+
+            Date now = new Date();
+            now.setTime(now.getTime()+5000);
+
+            msg.setReplyByDate(now);
 
             this.addBehaviour(new InitTradeBehaviour(this, msg));
         } catch (IOException e) {

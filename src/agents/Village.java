@@ -29,10 +29,18 @@ public abstract class Village extends BaseAgent {
     ConcurrentHashMap<ResourceType, Integer> openTrades = new ConcurrentHashMap<>();
     public int tick_num = 0;
 
-    public void printOpenTrades(){
-        openTrades.entrySet().forEach(entry->{
-            safePrintf("%s : %d", entry.getKey() ,entry.getValue());
-        });
+    public String printOpenTrades() {
+        StringBuilder sb = new StringBuilder();
+
+        sb.append(openTrades.getOrDefault(ResourceType.STONE, 0) + " ");
+
+        sb.append(openTrades.getOrDefault(ResourceType.WOOD, 0) + " ");
+
+        sb.append(openTrades.getOrDefault(ResourceType.FOOD, 0) + " ");
+
+        sb.append(openTrades.getOrDefault(ResourceType.CLAY, 0));
+
+        return sb.toString();
     }
 
     Village(String name) {
@@ -49,13 +57,13 @@ public abstract class Village extends BaseAgent {
         this.production_resources = production_resources;
     }
 
-     public void accountForNewTrade(Resource r){
+    public void accountForNewTrade(Resource r) {
 
         int new_quantity = r.getAmount();
         ResourceType type = r.getType();
         int curr_quantity = 0;
 
-        if(this.openTrades.containsKey(r.getType())){
+        if (this.openTrades.containsKey(r.getType())) {
             curr_quantity += this.openTrades.get(type);
         }
 
@@ -66,20 +74,25 @@ public abstract class Village extends BaseAgent {
         return this.openTrades.get(type);
     }
 
-    public void closeOpenTrade(Resource r){
-        int curr_quantity = this.openTrades.get(r.getType());
-        this.openTrades.put(r.getType(), curr_quantity - r.getAmount());
+    public void closeOpenTrade(Resource r) {
+        if (this.openTrades.containsKey(r.getType())) {
+            int curr_quantity = this.openTrades.get(r.getType());
+            this.openTrades.put(r.getType(), curr_quantity - r.getAmount());
+        }
     }
 
 
-    public boolean canPromiseTrade(Resource r){
+    public boolean canPromiseTrade(Resource r) {
         int lockedQuantity = 0;
 
-        if(this.openTrades.containsKey(r.getType())) {
+        if (this.openTrades.containsKey(r.getType())) {
             lockedQuantity += getResourceQuantityInOpenTrades(r.getType());
         }
 
         int totalLockedQuantity = lockedQuantity + r.getAmount();
+
+        if(this.resources.get(r.getType()).getAmount() <= totalLockedQuantity)
+            safePrintf("\t\t\tcanPromiseTrade stopped the trade");
 
         return this.resources.get(r.getType()).getAmount() - totalLockedQuantity > 0;
     }
@@ -139,12 +152,12 @@ public abstract class Village extends BaseAgent {
         ResourceLogger.getInstance().add(String.format(
                 "%d %s (%d) (%d) (%d) (%d)\n",
                 this.tick_num,
-                    this.getVillageName(),
-                    b1-a1,
-                    b2-a2,
-                    b3-a3,
-                    b4-a4
-                ));
+                this.getVillageName(),
+                b1 - a1,
+                b2 - a2,
+                b3 - a3,
+                b4 - a4
+        ));
 
         safePrintf("%s: As a %s, just did this trade:", getVillageName(), is_proposer ? "proposer" : "responder");
         safePrintf(t.toString());
@@ -153,7 +166,7 @@ public abstract class Village extends BaseAgent {
     public void proposeTrade(Resource r) {
         Trade t = createProposingTrade(r);
 
-        if(!this.canPromiseTrade(t.getOffer())){
+        if (!this.canPromiseTrade(t.getOffer())) {
             return;
         }
 
@@ -167,10 +180,11 @@ public abstract class Village extends BaseAgent {
 
     /**
      * Verifies if trade can be accepted, according to the village's standards
+     *
      * @param t
      * @return true if trade can be accepted, false otherwise
      */
-    public boolean canAcceptTrade(Trade t){
+    public boolean canAcceptTrade(Trade t) {
         return canPromiseTrade(t.getRequest());
     }
 
@@ -184,6 +198,7 @@ public abstract class Village extends BaseAgent {
 
     /**
      * Verifies if a trade should be performed base on the village's current status
+     *
      * @param r
      * @return true if should be performed, false otherwise
      */
@@ -191,6 +206,7 @@ public abstract class Village extends BaseAgent {
 
     /**
      * Selects the best trade based of the received counter proposals
+     *
      * @param trades
      * @return Best trade
      */
@@ -198,6 +214,7 @@ public abstract class Village extends BaseAgent {
 
     /**
      * Create a trade to broadcast to other villages
+     *
      * @param r Resource to request
      * @return Trade to broadcast
      */
@@ -205,6 +222,7 @@ public abstract class Village extends BaseAgent {
 
     /**
      * Decide a counter propose for a given received trade proposal
+     *
      * @param t Received trade proposal
      * @return Trade counter proposal
      */

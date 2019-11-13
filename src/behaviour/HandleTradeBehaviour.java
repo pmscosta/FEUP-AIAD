@@ -2,6 +2,7 @@ package behaviour;
 
 import agents.Village;
 import jade.core.Agent;
+import jade.core.behaviours.Behaviour;
 import jade.domain.FIPAAgentManagement.FailureException;
 import jade.domain.FIPAAgentManagement.NotUnderstoodException;
 import jade.domain.FIPAAgentManagement.RefuseException;
@@ -9,6 +10,7 @@ import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import jade.lang.acl.UnreadableException;
 import jade.proto.ContractNetResponder;
+import utils.ResourceLogger;
 import utils.Trade;
 
 import java.io.IOException;
@@ -37,6 +39,8 @@ public class HandleTradeBehaviour extends ContractNetResponder {
                 /*  start accounting for the promised quantity
                  *  since we are the receiver, that resource is the request
                  */
+
+                // ResourceLogger.getInstance().add("\tReceiver:\n\t\t" + this.getAgent().getLocalName() + " Accounting for " + t.getRequest() +"\n");
                 v.accountForNewTrade(t.getRequest());
 
                 ACLMessage reply = cfp.createReply();
@@ -83,7 +87,17 @@ public class HandleTradeBehaviour extends ContractNetResponder {
         } catch (UnreadableException e) {
             e.printStackTrace();
         }
+
         super.handleRejectProposal(cfp, propose, reject);
     }
 
+    @Override
+    protected void handleOutOfSequence(ACLMessage cfp, ACLMessage propose, ACLMessage msg) {
+        try {
+            ((Village) this.getAgent()).closeOpenTrade(((Trade) cfp.getContentObject()).getRequest());
+        } catch (UnreadableException e) {
+            e.printStackTrace();
+        }
+        super.handleOutOfSequence(cfp, propose, msg);
+    }
 }

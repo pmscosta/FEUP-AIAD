@@ -67,6 +67,7 @@ public abstract class Village extends BaseAgent {
             curr_quantity += this.openTrades.get(type);
         }
 
+
         this.openTrades.put(type, curr_quantity + new_quantity);
     }
 
@@ -90,9 +91,6 @@ public abstract class Village extends BaseAgent {
         }
 
         int totalLockedQuantity = lockedQuantity + r.getAmount();
-
-        if(this.resources.get(r.getType()).getAmount() <= totalLockedQuantity)
-            safePrintf("\t\t\tcanPromiseTrade stopped the trade");
 
         return this.resources.get(r.getType()).getAmount() - totalLockedQuantity > 0;
     }

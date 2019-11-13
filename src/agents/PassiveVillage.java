@@ -2,6 +2,7 @@ package agents;
 
 import behaviour.HandleTradeBehaviour;
 import behaviour.LifeCycleBehaviour;
+import jade.domain.FIPANames;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import utils.Resource;
@@ -47,13 +48,10 @@ public class PassiveVillage extends Village {
         addBehaviour(new LifeCycleBehaviour(this));
 
         // TODO: Not match all :upside_down_smile:
-        MessageTemplate mt =
-                MessageTemplate.or(
-                        MessageTemplate.MatchPerformative(ACLMessage.CFP),
-                        MessageTemplate.MatchPerformative(ACLMessage.ACCEPT_PROPOSAL)
-                );
+        MessageTemplate template =
+                MessageTemplate.MatchPerformative(ACLMessage.CFP);
 
-        addBehaviour(new HandleTradeBehaviour(this, mt));
+        addBehaviour(new HandleTradeBehaviour(this, template));
     }
 
     @Override
@@ -77,9 +75,6 @@ public class PassiveVillage extends Village {
 
         int have = this.resources.get(t.getRequest().getType()).getAmount();
         int requested = t.getRequest().getAmount();
-
-        if((have - requested) <= RESOURCES_THRESHOLD)
-            safePrintf("\t\t\twantToAcceptTrade stopped the trade");
 
         return (have - requested) > RESOURCES_THRESHOLD;
     }

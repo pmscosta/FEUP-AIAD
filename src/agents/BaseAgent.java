@@ -7,6 +7,7 @@ import jade.domain.FIPAAgentManagement.AMSAgentDescription;
 import jade.domain.FIPAAgentManagement.SearchConstraints;
 import jade.lang.acl.ACLMessage;
 import protocol.ACLObjectMessage;
+import utils.ResourceLogger;
 import utils.Trade;
 
 import java.io.IOException;
@@ -55,9 +56,11 @@ public abstract class BaseAgent extends Agent {
             }
 
             Date now = new Date();
-            now.setTime(now.getTime()+5000);
+            now.setTime(now.getTime()+2500);
 
             msg.setReplyByDate(now);
+
+           // ResourceLogger.getInstance().add("\t"+ this.getLocalName() + trade.toString() + "\n");
 
             this.addBehaviour(new InitTradeBehaviour(this, msg));
         } catch (IOException e) {

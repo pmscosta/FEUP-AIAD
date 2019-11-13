@@ -5,6 +5,7 @@ import jade.core.Agent;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.UnreadableException;
 import jade.proto.ContractNetInitiator;
+import utils.ResourceLogger;
 import utils.Trade;
 
 import java.util.ArrayList;
@@ -80,6 +81,8 @@ public class InitTradeBehaviour extends ContractNetInitiator {
 
             if(i == accepted_index){
                 reply.setPerformative(ACLMessage.ACCEPT_PROPOSAL);
+
+                // ResourceLogger.getInstance().add("\tInitiator:\n\t\t" + this.getAgent().getLocalName() + " Accounting for " + proposed_trades.get(accepted_index).getOffer() +"\n");
                 ((Village) this.myAgent).accountForNewTrade(proposed_trades.get(accepted_index).getOffer());
             }else{
                 reply.setPerformative(ACLMessage.REJECT_PROPOSAL);

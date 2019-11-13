@@ -3,6 +3,7 @@ package agents;
 import exceptions.NotEnoughResources;
 import utils.Resource;
 import utils.Resource.ResourceType;
+import utils.ResourceLogger;
 import utils.ResourceRandomizer;
 import utils.Trade;
 
@@ -26,6 +27,7 @@ public abstract class Village extends BaseAgent {
     }};
 
     ConcurrentHashMap<ResourceType, Integer> openTrades = new ConcurrentHashMap<>();
+    public int tick_num = 0;
 
     public void printOpenTrades(){
         openTrades.entrySet().forEach(entry->{
@@ -116,6 +118,11 @@ public abstract class Village extends BaseAgent {
          */
         this.closeOpenTrade(is_proposer ? t.getOffer() : t.getRequest());
 
+        int a1 = this.getResources().get(Resource.ResourceType.STONE).getAmount();
+        int a2 = this.getResources().get(Resource.ResourceType.WOOD).getAmount();
+        int a3 = this.getResources().get(Resource.ResourceType.FOOD).getAmount();
+        int a4 = this.getResources().get(Resource.ResourceType.CLAY).getAmount();
+
         try {
             this.resources.get(request.getType()).produceAmount(request.getAmount());
             this.resources.get(offer.getType()).consumeAmount(offer.getAmount());
@@ -123,6 +130,21 @@ public abstract class Village extends BaseAgent {
             // Never happens unless there are concurrency problems since canAcceptTrade has returned true before
             e.printStackTrace();
         }
+
+        int b1 = this.getResources().get(Resource.ResourceType.STONE).getAmount();
+        int b2 = this.getResources().get(Resource.ResourceType.WOOD).getAmount();
+        int b3 = this.getResources().get(Resource.ResourceType.FOOD).getAmount();
+        int b4 = this.getResources().get(Resource.ResourceType.CLAY).getAmount();
+
+        ResourceLogger.getInstance().add(String.format(
+                "%d %s (%d) (%d) (%d) (%d)\n",
+                this.tick_num,
+                    this.getVillageName(),
+                    b1-a1,
+                    b2-a2,
+                    b3-a3,
+                    b4-a4
+                ));
 
         safePrintf("%s: As a %s, just did this trade:", getVillageName(), is_proposer ? "proposer" : "responder");
         safePrintf(t.toString());

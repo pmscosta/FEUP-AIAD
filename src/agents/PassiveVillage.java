@@ -1,15 +1,12 @@
 package agents;
 
-import behaviour.ConsumingBehaviour;
 import behaviour.HandleTradeBehaviour;
-import behaviour.TradeProposalBehaviour;
-import behaviour.ProducingBehaviour;
+import behaviour.LifeCycleBehaviour;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import utils.Resource;
 import utils.Trade;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class PassiveVillage extends Village {
@@ -45,9 +42,7 @@ public class PassiveVillage extends Village {
 
     @Override
     public void setup() {
-        addBehaviour(new TradeProposalBehaviour(this));
-        addBehaviour(new ProducingBehaviour(this));
-        addBehaviour(new ConsumingBehaviour(this));
+        addBehaviour(new LifeCycleBehaviour(this));
 
         // TODO: Not match all :upside_down_smile:
         MessageTemplate mt =

@@ -1,5 +1,6 @@
 package agents;
 
+import behaviour.IInitTradeBehaviour;
 import behaviour.InitTradeBehaviour;
 import jade.core.Agent;
 import jade.domain.AMSService;
@@ -45,17 +46,6 @@ public abstract class BaseAgent extends Agent {
      * Broadcasts a trade to all the other agents
      */
     public final void broadcastTrade(Trade trade) {
-        safePrintf(this.getLocalName() + " : Sending trade: %s", trade);
-
-        try {
-            ACLObjectMessage msg = new ACLObjectMessage(ACLMessage.CFP, trade);
-            for (AMSAgentDescription ad : this.getOtherAgents()) {
-                msg.addReceiver(ad.getName());
-            }
-
-            this.addBehaviour(new InitTradeBehaviour(this, msg));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        this.addBehaviour(new IInitTradeBehaviour(this, trade));
     }
 }

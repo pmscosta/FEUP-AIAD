@@ -1,5 +1,7 @@
 package agents;
 
+import behaviour.HandleCounterProposalAnswerBehaviour;
+import behaviour.HandleProposalBehaviour;
 import behaviour.HandleTradeBehaviour;
 import behaviour.LifeCycleBehaviour;
 import jade.lang.acl.ACLMessage;
@@ -43,15 +45,8 @@ public class PassiveVillage extends Village {
     @Override
     public void setup() {
         addBehaviour(new LifeCycleBehaviour(this));
-
-        // TODO: Not match all :upside_down_smile:
-        MessageTemplate mt =
-                MessageTemplate.or(
-                        MessageTemplate.MatchPerformative(ACLMessage.CFP),
-                        MessageTemplate.MatchPerformative(ACLMessage.ACCEPT_PROPOSAL)
-                );
-
-        addBehaviour(new HandleTradeBehaviour(this, mt));
+        addBehaviour(new HandleProposalBehaviour());
+        addBehaviour(new HandleCounterProposalAnswerBehaviour());
     }
 
     @Override

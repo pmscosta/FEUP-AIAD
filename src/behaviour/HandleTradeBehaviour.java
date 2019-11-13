@@ -32,9 +32,19 @@ public class HandleTradeBehaviour extends ContractNetResponder {
 
             if (v.canAcceptTrade(t) && v.wantToAcceptTrade(t)) {
                 safePrintf(this.getAgent().getLocalName() + " : Can and want to accept!");
+
+
+                /*  start accounting for the promised quantity
+                 *  since we are the receiver, that resource is the request
+                 */
+                v.accountForNewTrade(t.getRequest());
+
                 ACLMessage reply = cfp.createReply();
                 reply.setPerformative(ACLMessage.PROPOSE);
-                reply.setContentObject(t); //TODO this is not needed since the initiator can keep count of the trade he proposed
+
+                Trade counter_propose = v.decideCounterPropose(t);
+
+                reply.setContentObject(counter_propose); //TODO this is not needed since the initiator can keep count of the trade he proposed
                 return reply;
             }
         } catch (UnreadableException | IOException e) {
@@ -43,7 +53,7 @@ public class HandleTradeBehaviour extends ContractNetResponder {
             throw new NotUnderstoodException("Content Object not Trade");
         }
 
-        safePrintf("Not accepting the trade");
+        safePrintf(this.getAgent().getLocalName() + " : Not accepting the trade");
         throw new RefuseException("Sorry, don't want to/can't accept the Trade at the moment :c");
     }
 
@@ -66,8 +76,14 @@ public class HandleTradeBehaviour extends ContractNetResponder {
 
     @Override
     protected void handleRejectProposal(ACLMessage cfp, ACLMessage propose, ACLMessage reject) {
-        safePrintf("My proposal was rejected... :c");
+        safePrintf(this.getAgent().getLocalName() + " : My proposal was rejected... :c");
+
         // TODO: Free the "locked" resources
+/*        try {
+            ((Village) this.getAgent()).closeOpenTrade(((Trade) cfp.getContentObject()).getOffer());
+        } catch (UnreadableException e) {
+            e.printStackTrace();
+        }*/
         super.handleRejectProposal(cfp, propose, reject);
     }
 

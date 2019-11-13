@@ -1,9 +1,7 @@
 package agents;
 
-import behaviour.ConsumingBehaviour;
 import behaviour.HandleTradeBehaviour;
-import behaviour.TradeProposalBehaviour;
-import behaviour.ProducingBehaviour;
+import behaviour.LifeCycleBehaviour;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import utils.Resource;
@@ -13,7 +11,7 @@ import java.util.List;
 
 public class PassiveVillage extends Village {
 
-    private static final int RESOURCES_THRESHOLD = 980;
+    private static final int RESOURCES_THRESHOLD = 40;
 
     // The village will try to trade enough resources to survive for
     // 10 ticks ,based on the village resource consumption rate
@@ -44,9 +42,7 @@ public class PassiveVillage extends Village {
 
     @Override
     public void setup() {
-        addBehaviour(new TradeProposalBehaviour(this));
-        addBehaviour(new ProducingBehaviour(this));
-        addBehaviour(new ConsumingBehaviour(this));
+        addBehaviour(new LifeCycleBehaviour(this));
 
         // TODO: Not match all :upside_down_smile:
         MessageTemplate mt =
@@ -64,26 +60,34 @@ public class PassiveVillage extends Village {
     }
 
     @Override
-    public void proposeTrade(Resource r) {
+    public Trade createProposingTrade(Resource r){
+
         Resource most_abundant_resource = getMostAbundantResource();
         int quantity = getTradeResourceQuantity(r, most_abundant_resource);
 
-        broadcastTrade(new Trade(
+        return new Trade(
                 new Resource(r.getType(), quantity),
-                new Resource(most_abundant_resource.getType(), quantity)
-        ));
+                new Resource(most_abundant_resource.getType(), quantity));
     }
 
     @Override
     public boolean wantToAcceptTrade(Trade t) {
-        return true;
-    }
 
-    @Override
-    public boolean canAcceptTrade(Trade t) {
         int have = this.resources.get(t.getRequest().getType()).getAmount();
         int requested = t.getRequest().getAmount();
 
         return (have - requested) > RESOURCES_THRESHOLD;
     }
+
+    @Override
+    public int selectBestTrade(List<Trade> trades){
+        return 0;
+    }
+
+    @Override
+    public Trade decideCounterPropose(Trade t) {
+        // Passive Village offer a counter_propose equal to the original propose
+        return t;
+    }
+
 }

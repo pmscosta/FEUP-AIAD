@@ -117,8 +117,8 @@ public abstract class Village extends BaseAgent {
         this.closeOpenTrade(is_proposer ? t.getOffer() : t.getRequest());
 
         try {
-            this.resources.get(t.getRequest().getType()).produceAmount(request.getAmount());
-            this.resources.get(t.getOffer().getType()).consumeAmount(offer.getAmount());
+            this.resources.get(request.getType()).produceAmount(request.getAmount());
+            this.resources.get(offer.getType()).consumeAmount(offer.getAmount());
         } catch (NotEnoughResources e) {
             // Never happens unless there are concurrency problems since canAcceptTrade has returned true before
             e.printStackTrace();

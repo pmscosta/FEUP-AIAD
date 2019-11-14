@@ -168,7 +168,11 @@ public class TradeInitiatorBehaviour extends Behaviour {
         ACLMessage msg = this.myAgent.receive(await_final_confirmation_mt);
         Village village = ((Village) this.getAgent());
         if (msg != null) {
-            village.applyTrade(this.trade, true);
+            try {
+                village.applyTrade((Trade) msg.getContentObject(), true);
+            } catch (UnreadableException e) {
+                e.printStackTrace();
+            }
 
             this.trade_step = TradeStep.DONE;
         }

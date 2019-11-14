@@ -5,6 +5,7 @@ import jade.core.behaviours.CyclicBehaviour;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import jade.lang.acl.UnreadableException;
+import utils.Printer;
 import utils.Trade;
 
 import java.io.IOException;
@@ -27,6 +28,7 @@ public class HandleProposalBehaviour extends CyclicBehaviour {
                 Village village = (Village) this.getAgent();
                 ACLMessage reply = msg.createReply();
 
+                // TODO: CANACCEPTTRADE MUST BE CHECKED AFTER DECIDECOUNTERPROPOSE -> IF RATIOS CHANGE AGAINST ME (less than 1) there may be issues (potician issues!!!)
                 if (village.canAcceptTrade(trade) && village.wantToAcceptTrade(trade)) {
                     Trade counter_propose = village.decideCounterPropose(trade);
 

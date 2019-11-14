@@ -1,3 +1,4 @@
+import agents.GreedyVillage;
 import agents.PassiveVillage;
 import agents.Village;
 import jade.core.Profile;
@@ -65,6 +66,8 @@ public class Main {
 
                 if (type.equals("Passive")) {
                     villages.add(new PassiveVillage(name, consumption_rate, production_resources));
+                } else if (type.equals("Greedy")) {
+                    villages.add(new GreedyVillage(name, consumption_rate, production_resources));
                 }
             }
         }

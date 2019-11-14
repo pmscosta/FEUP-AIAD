@@ -26,12 +26,8 @@ public class PassiveVillage extends Village {
         super(name, resource_consumption, production_resources);
     }
 
-    private int getTargetSurvivalQuantity() {
-        return getResourceConsumption() * TARGET_SURVIVAL_TIME;
-    }
-
     private int getTradeResourceQuantity(Resource request, Resource offer) {
-        int target_survival_quantity = (RESOURCES_THRESHOLD - request.getAmount()) + getTargetSurvivalQuantity();
+        int target_survival_quantity = (RESOURCES_THRESHOLD - request.getAmount()) + getTargetSurvivalQuantity(TARGET_SURVIVAL_TIME);
         int midpoint_quantity = Math.abs(RESOURCES_THRESHOLD - offer.getAmount()) / 2;
 
         return Math.min(target_survival_quantity, midpoint_quantity);

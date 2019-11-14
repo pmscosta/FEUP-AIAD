@@ -19,7 +19,7 @@ public class LifeCycleBehaviour extends TimeTickerBehaviour {
             try {
                 r.consumeAmount(village.getResourceConsumption());
             } catch (NotEnoughResources e) {
-                safePrintf(e.toString());
+                safePrintf("\t\t*** %s TERMINATED [%s] ***", village.getVillageName(), e.toString());
                 this.village.doDelete();
             }
         }

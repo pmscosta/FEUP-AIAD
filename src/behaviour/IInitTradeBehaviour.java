@@ -30,10 +30,9 @@ public class IInitTradeBehaviour extends Behaviour {
     private int num_contacted_villages = 0;
     private int num_counter_offer_replies = 0;
 
-    private static final long MESSAGE_WAITING_TIMEOUT = 500L;
+    private static final long MESSAGE_WAITING_TIMEOUT = 200L;
 
     List<ACLMessage> propose_messages = new ArrayList<>();
-    List<Trade>  propose_trades = new ArrayList<>();
 
     public IInitTradeBehaviour(Agent agent, Trade trade) {
         super(agent);
@@ -85,6 +84,10 @@ public class IInitTradeBehaviour extends Behaviour {
                 msg.addReceiver(ad.getName());
             }
 
+            if (num_contacted_villages == 0) {
+                this.trade_step = TradeStep.DONE;
+            }
+
             this.myAgent.send(msg);
         } catch (IOException e) {
             e.printStackTrace();
@@ -99,31 +102,39 @@ public class IInitTradeBehaviour extends Behaviour {
                 MessageTemplate.MatchPerformative(ACLMessage.PROPOSE)
         );
 
-        ACLMessage msg = this.myAgent.receive(mt);
-        if (msg != null) {
-            try {
-                Trade trade = (Trade) msg.getContentObject();
-                propose_messages.add(msg);
-                propose_trades.add(trade);
-            } catch (UnreadableException e) {
-                e.printStackTrace();
+
+        while(num_counter_offer_replies < num_contacted_villages) {
+            ACLMessage msg = this.myAgent.blockingReceive(mt, MESSAGE_WAITING_TIMEOUT);
+
+            if (msg == null) {
+                break;
             }
 
+            propose_messages.add(msg);
             num_counter_offer_replies++;
             // Printer.safePrintf("\t%s [INITIATOR]: in awaitCounterOffers() got ((%d/%d)) for id [%s]", this.getAgent().getLocalName(), num_counter_offer_replies, num_contacted_villages, msg.getConversationId());
-
-            if (num_counter_offer_replies >= num_contacted_villages) {
-                this.trade_step = TradeStep.DECIDE_BEST_OFFER;
-            }
         }
-        else {
-            block();
+
+        if (num_counter_offer_replies == 0)   {
+            this.trade_step = TradeStep.DONE;
+        } else {
+            this.trade_step = TradeStep.DECIDE_BEST_OFFER;
         }
     }
 
     private void decideBestOffer() {
         Village village = ((Village) this.getAgent());
 
+
+
+        List<Trade> propose_trades = new ArrayList<>();
+        for (ACLMessage message : propose_messages) {
+            try {
+                propose_trades.add((Trade) message.getContentObject());
+            } catch (UnreadableException e) {
+                e.printStackTrace();
+            }
+        }
         int accepted_index = village.selectBestTrade(propose_trades);
 
         for(int i = 0; i < propose_messages.size(); i++){

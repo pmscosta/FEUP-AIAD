@@ -16,7 +16,7 @@ public abstract class BaseAgent extends Agent {
     /**
      * Finds all agents EXCEPT itself and the "special-kind-of-special" ones
      */
-    public final AMSAgentDescription[] getOtherAgents() {
+    public final AMSAgentDescription[] findVillages() {
         AMSAgentDescription[] agents = null;
         try {
             SearchConstraints c = new SearchConstraints();
@@ -27,7 +27,9 @@ public abstract class BaseAgent extends Agent {
                                 &&
                                 !agentDescription.getName().getLocalName().equals("ams")
                                 &&
-                                !agentDescription.getName().getLocalName().equals("df");
+                                !agentDescription.getName().getLocalName().equals("df")
+                                &&
+                                !agentDescription.getName().getLocalName().equals("attacker");
                     })
                     .toArray(AMSAgentDescription[]::new);
         } catch (Exception e) {

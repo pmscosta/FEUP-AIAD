@@ -3,6 +3,7 @@ package agents;
 import behaviour.HandleCounterProposalAnswerBehaviour;
 import behaviour.HandleProposalBehaviour;
 import behaviour.LifeCycleBehaviour;
+import behaviour.VulnerableBehaviour;
 import exceptions.NotEnoughResources;
 import utils.Resource;
 import utils.Resource.ResourceType;
@@ -179,6 +180,7 @@ public abstract class Village extends BaseAgent {
         addBehaviour(new LifeCycleBehaviour(this));
         addBehaviour(new HandleProposalBehaviour());
         addBehaviour(new HandleCounterProposalAnswerBehaviour());
+        addBehaviour(new VulnerableBehaviour());
     }
 
     protected int getTargetSurvivalQuantity(int num_ticks) {

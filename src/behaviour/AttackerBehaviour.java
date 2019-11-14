@@ -5,8 +5,11 @@ import jade.core.behaviours.TickerBehaviour;
 import jade.domain.FIPAAgentManagement.AMSAgentDescription;
 import jade.lang.acl.ACLMessage;
 import protocol.ACLObjectMessage;
+import utils.AttackVector;
+import utils.Printer;
 import utils.Resource;
 import utils.Resource.ResourceType;
+import utils.ResourceLogger;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -28,27 +31,36 @@ public class AttackerBehaviour extends TickerBehaviour {
         this.attacker = attacker;
     }
 
-    public List<Resource> buildAttackVector() {
-        return Arrays
+    public AttackVector buildAttackVector() {
+        return new AttackVector(Arrays
                 .stream(ResourceType.values())
                 .map(resource_type -> new Resource(resource_type, ThreadLocalRandom.current().nextInt(MIN_STEAL_AMOUNT, MAX_STEAL_AMOUNT+1)))
-                .collect(Collectors.toList());
+                .collect(Collectors.toList()));
     }
 
     @Override
     protected void onTick() {
-        List<Resource> attack_vector = buildAttackVector();
+        AttackVector attack_vector = buildAttackVector();
 
         try {
-            ACLObjectMessage msg = new ACLObjectMessage(ACLMessage.CFP, (Serializable) attack_vector);
+            ACLObjectMessage msg = new ACLObjectMessage(ACLMessage.CFP, attack_vector);
             msg.setPerformative(ACLMessage.INFORM);
             msg.setOntology("attack");
 
-            for (AMSAgentDescription village : attacker.findVillages()) {
-                msg.addReceiver(village.getName());
-            }
+            AMSAgentDescription[] village_descriptions = attacker.findVillages();
+            msg.addReceiver(
+                    village_descriptions[ThreadLocalRandom.current().nextInt(village_descriptions.length)].getName()
+            );
 
             this.myAgent.send(msg);
+
+            ResourceLogger.getInstance().add(String.format(
+                    "Attacking! Attack Vector: [%s %s %s %s]\n",
+                    attack_vector.getVector().get(0),
+                    attack_vector.getVector().get(1),
+                    attack_vector.getVector().get(2),
+                    attack_vector.getVector().get(3)
+            ));
         } catch (IOException e) {
             e.printStackTrace();
         }

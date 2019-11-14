@@ -39,14 +39,4 @@
         <stone_production_rate>10</stone_production_rate>
         <wood_production_rate>0</wood_production_rate>
     </village>
-
-    <village>
-        <name>Switzerland</name>
-        <type>Greedy</type>
-        <consumption_rate>5</consumption_rate>
-        <clay_production_rate>7</clay_production_rate>
-        <food_production_rate>7</food_production_rate>
-        <stone_production_rate>0</stone_production_rate>
-        <wood_production_rate>7</wood_production_rate>
-    </village>
 </villages>

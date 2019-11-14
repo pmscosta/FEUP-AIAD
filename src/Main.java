@@ -1,3 +1,4 @@
+import agents.Attacker;
 import agents.GreedyVillage;
 import agents.PassiveVillage;
 import agents.Village;
@@ -11,6 +12,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
+import utils.Printer;
 import utils.Resource;
 import utils.ShutdownHandler;
 
@@ -31,9 +33,13 @@ public class Main {
         Profile profile = new ProfileImpl();
         ContainerController mainContainer = rt.createMainContainer(profile);
 
+        // Add village(s)
         for (Village village : parseVillagesFile("villages.xml")) {
             mainContainer.acceptNewAgent(village.getVillageName(), village).start();
         }
+
+        // Add attacker
+        mainContainer.acceptNewAgent("attacker", new Attacker()).start();
     }
 
     private static final LinkedList<Village> parseVillagesFile(String file_path) throws IOException, ParserConfigurationException, SAXException {

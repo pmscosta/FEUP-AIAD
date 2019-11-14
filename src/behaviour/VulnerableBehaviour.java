@@ -6,14 +6,17 @@ import jade.core.behaviours.CyclicBehaviour;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import jade.lang.acl.UnreadableException;
+import utils.AttackVector;
 import utils.Resource;
+import utils.ResourceLogger;
+
 import java.util.List;
 
 import static utils.Printer.safePrintf;
 
 public class VulnerableBehaviour extends CyclicBehaviour {
 
-    private static final MessageTemplate mt = MessageTemplate.or(
+    private static final MessageTemplate mt = MessageTemplate.and(
             MessageTemplate.MatchOntology("attack"),
             MessageTemplate.MatchPerformative(ACLMessage.INFORM)
     );
@@ -25,10 +28,18 @@ public class VulnerableBehaviour extends CyclicBehaviour {
 
         if (msg != null) {
             try {
-                // Printer.safePrintf("\t%s [RECEIVER]: Received Proposal", this.getAgent().getLocalName());
-                List<Resource> attack_vector = (List<Resource>) msg.getContentObject();
+                AttackVector attack_vector = ((AttackVector) msg.getContentObject());
 
-                for (Resource attack : attack_vector) {
+                ResourceLogger.getInstance().add(String.format(
+                        "%s: Je suis attacked! Attack Vector: [%s %s %s %s]\n",
+                        village.getVillageName(),
+                        attack_vector.getVector().get(0),
+                        attack_vector.getVector().get(1),
+                        attack_vector.getVector().get(2),
+                        attack_vector.getVector().get(3)
+                ));
+
+                for (Resource attack : attack_vector.getVector()) {
                     village.getResources().get(attack.getType()).consumeAmount(attack.getAmount());
                 }
             } catch (UnreadableException e) {

@@ -32,11 +32,7 @@ public class LifeCycleBehaviour extends TimeTickerBehaviour {
     }
 
     public void proposeTrades() {
-        for (Resource r : village.getResources().values()) {
-            if (village.shouldProposeTrade(r)) {
-                village.proposeTrade(r);
-            }
-        }
+        village.proposeTrades(village.generateDesiredTrades());
     }
 
     public void logStuff() {

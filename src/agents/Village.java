@@ -162,14 +162,12 @@ public abstract class Village extends BaseAgent {
         safePrintf(t.toString());
     }
 
-    public void proposeTrade(Resource r) {
-        Trade t = createProposingTrade(r);
-
-        if(!this.canPromiseTrade(t.getOffer())){
-            return;
+    public void proposeTrades(List<Trade> trades) {
+        for (Trade trade : trades) {
+            if (this.canPromiseTrade(trade.getOffer())) {
+                broadcastTrade(trade);
+            }
         }
-
-        broadcastTrade(t);
     }
 
     public void setup() {
@@ -187,13 +185,6 @@ public abstract class Village extends BaseAgent {
     public abstract boolean wantToAcceptTrade(Trade t);
 
     /**
-     * Verifies if a trade should be performed base on the village's current status
-     * @param r
-     * @return true if should be performed, false otherwise
-     */
-    public abstract boolean shouldProposeTrade(Resource r);
-
-    /**
      * Selects the best trade based of the received counter proposals
      * @param trades
      * @return Best trade
@@ -201,16 +192,15 @@ public abstract class Village extends BaseAgent {
     public abstract int selectBestTrade(List<Trade> trades);
 
     /**
-     * Create a trade to broadcast to other villages
-     * @param r Resource to request
-     * @return Trade to broadcast
-     */
-    public abstract Trade createProposingTrade(Resource r);
-
-    /**
      * Decide a counter propose for a given received trade proposal
      * @param t Received trade proposal
      * @return Trade counter proposal
      */
     public abstract Trade decideCounterPropose(Trade t);
+
+    /**
+     * Returns all the trades that a village wants to make at a certain point in time
+     * @return List of desired trades
+     */
+    public abstract List<Trade> generateDesiredTrades();
 }

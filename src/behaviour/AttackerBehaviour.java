@@ -23,7 +23,7 @@ public class AttackerBehaviour extends TickerBehaviour {
 
     final Attacker attacker;
 
-    AttackerBehaviour(Attacker attacker) {
+    public AttackerBehaviour(Attacker attacker) {
         super(attacker, DEFAULT_TIME);
         this.attacker = attacker;
     }

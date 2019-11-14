@@ -40,13 +40,6 @@ public class PassiveVillage extends Village {
     }
 
     @Override
-    public void setup() {
-        addBehaviour(new LifeCycleBehaviour(this));
-        addBehaviour(new HandleProposalBehaviour());
-        addBehaviour(new HandleCounterProposalAnswerBehaviour());
-    }
-
-    @Override
     public boolean shouldProposeTrade(Resource r) {
         return r.getAmount() < RESOURCES_THRESHOLD;
     }

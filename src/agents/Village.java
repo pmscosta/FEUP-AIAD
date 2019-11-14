@@ -1,5 +1,8 @@
 package agents;
 
+import behaviour.HandleCounterProposalAnswerBehaviour;
+import behaviour.HandleProposalBehaviour;
+import behaviour.LifeCycleBehaviour;
 import exceptions.NotEnoughResources;
 import utils.Resource;
 import utils.Resource.ResourceType;
@@ -109,6 +112,15 @@ public abstract class Village extends BaseAgent {
         return this.name;
     }
 
+    /**
+     * Verifies if trade can be accepted, according to the village's standards
+     * @param t
+     * @return true if trade can be accepted, false otherwise
+     */
+    public boolean canAcceptTrade(Trade t){
+        return canPromiseTrade(t.getRequest());
+    }
+
     public void applyTrade(Trade t, boolean is_proposer) {
         Resource request = is_proposer ? t.getRequest() : t.getOffer();
         Resource offer = is_proposer ? t.getOffer() : t.getRequest();
@@ -160,18 +172,10 @@ public abstract class Village extends BaseAgent {
         broadcastTrade(t);
     }
 
-    /**
-     * Sets up the Villages behaviours
-     */
-    public abstract void setup();
-
-    /**
-     * Verifies if trade can be accepted, according to the village's standards
-     * @param t
-     * @return true if trade can be accepted, false otherwise
-     */
-    public boolean canAcceptTrade(Trade t){
-        return canPromiseTrade(t.getRequest());
+    public void setup() {
+        addBehaviour(new LifeCycleBehaviour(this));
+        addBehaviour(new HandleProposalBehaviour());
+        addBehaviour(new HandleCounterProposalAnswerBehaviour());
     }
 
     /**

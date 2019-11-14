@@ -12,6 +12,7 @@ import utils.Trade;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 import static utils.Printer.safePrintf;
 
@@ -100,6 +101,10 @@ public abstract class Village extends BaseAgent {
         return this.getResources().values().stream().max(Comparator.comparing(Resource::getAmount)).orElse(null);
     }
 
+    public List<Resource> getSortedResources() {
+        return this.getResources().values().stream().sorted().collect(Collectors.toList());
+    }
+
     public ConcurrentHashMap<ResourceType, Resource> getResources() {
         return this.resources;
     }
@@ -174,6 +179,10 @@ public abstract class Village extends BaseAgent {
         addBehaviour(new LifeCycleBehaviour(this));
         addBehaviour(new HandleProposalBehaviour());
         addBehaviour(new HandleCounterProposalAnswerBehaviour());
+    }
+
+    protected int getTargetSurvivalQuantity(int num_ticks) {
+        return getResourceConsumption() * num_ticks;
     }
 
     /**

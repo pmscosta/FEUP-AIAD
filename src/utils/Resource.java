@@ -3,10 +3,11 @@ package utils;
 import exceptions.NotEnoughResources;
 
 import java.io.Serializable;
+import java.util.Objects;
 
-public class Resource implements Serializable {
+public class Resource implements Serializable, Comparable {
 
-    private static final int DEFAULT_AMOUNT = 50;
+    public static final int DEFAULT_AMOUNT = 50;
     private ResourceType type;
 
     private int amount;
@@ -41,6 +42,11 @@ public class Resource implements Serializable {
 
     public String toString() {
         return String.format("%s: %s", this.type.name(), this.amount);
+    }
+
+    @Override
+    public int compareTo(Object o) {
+        return Integer.compare(this.getAmount(), ((Resource) o).getAmount());
     }
 
     public enum ResourceType {

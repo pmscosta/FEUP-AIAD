@@ -33,6 +33,10 @@ public class TradeInitiatorBehaviour extends Behaviour {
 
     List<ACLMessage> propose_messages = new ArrayList<>();
 
+    private final MessageTemplate await_counter_offer_mt;
+
+    private final MessageTemplate await_final_confirmation_mt;
+
     public TradeInitiatorBehaviour(Agent agent, Trade trade) {
         super(agent);
         this.trade = trade;
@@ -41,6 +45,16 @@ public class TradeInitiatorBehaviour extends Behaviour {
                 trade.getRequest().getType(),
                 trade.getOffer().getType(),
                 System.currentTimeMillis()
+        );
+
+        await_counter_offer_mt = MessageTemplate.and(
+                MessageTemplate.MatchConversationId(this.trade_id),
+                MessageTemplate.MatchPerformative(ACLMessage.PROPOSE)
+        );
+
+        await_final_confirmation_mt = MessageTemplate.and(
+                MessageTemplate.MatchConversationId(this.trade_id),
+                MessageTemplate.MatchPerformative(ACLMessage.INFORM)
         );
     }
 
@@ -96,14 +110,8 @@ public class TradeInitiatorBehaviour extends Behaviour {
     }
 
     private void awaitCounterOffers() {
-        MessageTemplate mt = MessageTemplate.and(
-                MessageTemplate.MatchConversationId(this.trade_id),
-                MessageTemplate.MatchPerformative(ACLMessage.PROPOSE)
-        );
-
-
         while(num_counter_offer_replies < num_contacted_villages) {
-            ACLMessage msg = this.myAgent.blockingReceive(mt, MESSAGE_WAITING_TIMEOUT);
+            ACLMessage msg = this.myAgent.blockingReceive(await_counter_offer_mt, MESSAGE_WAITING_TIMEOUT);
 
             if (msg == null) {
                 break;
@@ -123,8 +131,6 @@ public class TradeInitiatorBehaviour extends Behaviour {
 
     private void decideBestOffer() {
         Village village = ((Village) this.getAgent());
-
-
 
         List<Trade> propose_trades = new ArrayList<>();
         for (ACLMessage message : propose_messages) {
@@ -159,12 +165,7 @@ public class TradeInitiatorBehaviour extends Behaviour {
     }
 
     private void awaitFinalConfirmation() {
-        MessageTemplate mt = MessageTemplate.and(
-                MessageTemplate.MatchConversationId(this.trade_id),
-                MessageTemplate.MatchPerformative(ACLMessage.INFORM)
-        );
-
-        ACLMessage msg = this.myAgent.receive(mt);
+        ACLMessage msg = this.myAgent.receive(await_final_confirmation_mt);
         Village village = ((Village) this.getAgent());
         if (msg != null) {
             village.applyTrade(this.trade, true);

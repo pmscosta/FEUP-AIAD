@@ -14,21 +14,19 @@ import java.io.IOException;
  */
 public class HandleCounterProposalAnswerBehaviour extends CyclicBehaviour {
 
+    private static final MessageTemplate mt = MessageTemplate.or(
+            MessageTemplate.MatchPerformative(ACLMessage.ACCEPT_PROPOSAL),
+            MessageTemplate.MatchPerformative(ACLMessage.REJECT_PROPOSAL)
+    );
+
     @Override
     public void action() {
-        MessageTemplate mt = MessageTemplate.or(
-                MessageTemplate.MatchPerformative(ACLMessage.ACCEPT_PROPOSAL),
-                MessageTemplate.MatchPerformative(ACLMessage.REJECT_PROPOSAL)
-        );
-
         ACLMessage msg = this.myAgent.receive(mt);
         if (msg != null) {
             if (msg.getPerformative() == ACLMessage.ACCEPT_PROPOSAL) {
                 handleAcceptProposal(msg);
             } else if (msg.getPerformative() == ACLMessage.REJECT_PROPOSAL) {
                 handleRejectProposal(msg);
-            } else {
-                // ...?
             }
         }
         else {

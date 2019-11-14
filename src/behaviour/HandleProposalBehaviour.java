@@ -14,9 +14,10 @@ import java.io.IOException;
  */
 public class HandleProposalBehaviour extends CyclicBehaviour {
 
+    private static final MessageTemplate mt = MessageTemplate.MatchPerformative(ACLMessage.CFP);
+
     @Override
     public void action() {
-        MessageTemplate mt = MessageTemplate.MatchPerformative(ACLMessage.CFP);
         ACLMessage msg = this.myAgent.receive(mt);
 
         if (msg != null) {

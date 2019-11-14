@@ -6,15 +6,12 @@ import jade.domain.FIPAAgentManagement.AMSAgentDescription;
 import jade.lang.acl.ACLMessage;
 import protocol.ACLObjectMessage;
 import utils.AttackVector;
-import utils.Printer;
 import utils.Resource;
 import utils.Resource.ResourceType;
-import utils.ResourceLogger;
+import utils.Logger;
 
 import java.io.IOException;
-import java.io.Serializable;
 import java.util.Arrays;
-import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
@@ -54,8 +51,8 @@ public class AttackerBehaviour extends TickerBehaviour {
 
             this.myAgent.send(msg);
 
-            ResourceLogger.getInstance().add(String.format(
-                    "Attacking! Attack Vector: [%s %s %s %s]\n",
+            Logger.getInstance().add(String.format(
+                    "[Village Attacked] Attack Vector: [%s %s %s %s]\n",
                     attack_vector.getVector().get(0),
                     attack_vector.getVector().get(1),
                     attack_vector.getVector().get(2),

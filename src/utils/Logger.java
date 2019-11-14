@@ -6,17 +6,17 @@ import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 
-public class ResourceLogger {
+public class Logger {
 
-    private static ResourceLogger instance;
+    private static Logger instance;
     List<String> log = new LinkedList<>();
 
-    private ResourceLogger() {
+    private Logger() {
     }
 
-    public static ResourceLogger getInstance() {
+    public static Logger getInstance() {
         if (instance == null) {
-            instance = new ResourceLogger();
+            instance = new Logger();
         }
         return instance;
     }
@@ -26,7 +26,7 @@ public class ResourceLogger {
     }
 
     public void writeLogToFile() throws IOException {
-        BufferedWriter writer = new BufferedWriter(new FileWriter("resource_log.txt"));
+        BufferedWriter writer = new BufferedWriter(new FileWriter("log.txt"));
 
         for (String entry : log) {
             writer.write(entry);

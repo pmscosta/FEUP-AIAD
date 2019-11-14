@@ -7,7 +7,7 @@ import behaviour.VulnerableBehaviour;
 import exceptions.NotEnoughResources;
 import utils.Resource;
 import utils.Resource.ResourceType;
-import utils.ResourceLogger;
+import utils.Logger;
 import utils.ResourceRandomizer;
 import utils.Trade;
 
@@ -154,8 +154,8 @@ public abstract class Village extends BaseAgent {
         int b3 = this.getResources().get(Resource.ResourceType.FOOD).getAmount();
         int b4 = this.getResources().get(Resource.ResourceType.CLAY).getAmount();
 
-        ResourceLogger.getInstance().add(String.format(
-                "%d %s (%d) (%d) (%d) (%d)\n",
+        Logger.getInstance().add(String.format(
+                "[Trade Applying] %d %s %d %d %d %d\n",
                 this.tick_num,
                     this.getVillageName(),
                     b1-a1,

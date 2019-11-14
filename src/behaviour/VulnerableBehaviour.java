@@ -8,9 +8,7 @@ import jade.lang.acl.MessageTemplate;
 import jade.lang.acl.UnreadableException;
 import utils.AttackVector;
 import utils.Resource;
-import utils.ResourceLogger;
-
-import java.util.List;
+import utils.Logger;
 
 import static utils.Printer.safePrintf;
 
@@ -30,8 +28,8 @@ public class VulnerableBehaviour extends CyclicBehaviour {
             try {
                 AttackVector attack_vector = ((AttackVector) msg.getContentObject());
 
-                ResourceLogger.getInstance().add(String.format(
-                        "%s: Je suis attacked! Attack Vector: [%s %s %s %s]\n",
+                Logger.getInstance().add(String.format(
+                        "[Attack] Attack Vector: [%s %s %s %s]\n",
                         village.getVillageName(),
                         attack_vector.getVector().get(0),
                         attack_vector.getVector().get(1),

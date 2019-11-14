@@ -1,6 +1,7 @@
 import agents.Attacker;
 import agents.GreedyVillage;
 import agents.PassiveVillage;
+import agents.SmartVillage;
 import agents.Village;
 import jade.core.Profile;
 import jade.core.ProfileImpl;
@@ -66,14 +67,22 @@ public class Main {
 
                 List<Resource> production_resources = new LinkedList<>();
                 production_resources.add(new Resource(Resource.ResourceType.CLAY, Integer.parseInt(village_element.getElementsByTagName("clay_production_rate").item(0).getTextContent())));
-                production_resources.add(new Resource(Resource.ResourceType.FOOD,Integer.parseInt(village_element.getElementsByTagName("food_production_rate").item(0).getTextContent())));
+                production_resources.add(new Resource(Resource.ResourceType.FOOD, Integer.parseInt(village_element.getElementsByTagName("food_production_rate").item(0).getTextContent())));
                 production_resources.add(new Resource(Resource.ResourceType.STONE, Integer.parseInt(village_element.getElementsByTagName("stone_production_rate").item(0).getTextContent())));
                 production_resources.add(new Resource(Resource.ResourceType.WOOD, Integer.parseInt(village_element.getElementsByTagName("wood_production_rate").item(0).getTextContent())));
 
-                if (type.equals("Passive")) {
-                    villages.add(new PassiveVillage(name, consumption_rate, production_resources));
-                } else if (type.equals("Greedy")) {
-                    villages.add(new GreedyVillage(name, consumption_rate, production_resources));
+                switch (type) {
+                    case "Passive":
+                        villages.add(new PassiveVillage(name, consumption_rate, production_resources));
+                        break;
+                    case "Greedy":
+                        villages.add(new GreedyVillage(name, consumption_rate, production_resources));
+                        break;
+                    case "Smart":
+                        villages.add(new SmartVillage(name, consumption_rate, production_resources));
+                        break;
+                    default:
+                        break;
                 }
             }
         }

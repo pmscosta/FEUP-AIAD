@@ -1,5 +1,8 @@
 package agents;
 
+import behaviour.HandleCounterProposalAnswerBehaviour;
+import behaviour.HandleProposalBehaviour;
+import behaviour.LifeCycleBehaviour;
 import exceptions.NotEnoughResources;
 import utils.Resource;
 import utils.Resource.ResourceType;
@@ -109,6 +112,15 @@ public abstract class Village extends BaseAgent {
         return this.name;
     }
 
+    /**
+     * Verifies if trade can be accepted, according to the village's standards
+     * @param t
+     * @return true if trade can be accepted, false otherwise
+     */
+    public boolean canAcceptTrade(Trade t){
+        return canPromiseTrade(t.getRequest());
+    }
+
     public void applyTrade(Trade t, boolean is_proposer) {
         Resource request = is_proposer ? t.getRequest() : t.getOffer();
         Resource offer = is_proposer ? t.getOffer() : t.getRequest();
@@ -150,28 +162,18 @@ public abstract class Village extends BaseAgent {
         safePrintf(t.toString());
     }
 
-    public void proposeTrade(Resource r) {
-        Trade t = createProposingTrade(r);
-
-        if(!this.canPromiseTrade(t.getOffer())){
-            return;
+    public void proposeTrades(List<Trade> trades) {
+        for (Trade trade : trades) {
+            if (this.canPromiseTrade(trade.getOffer())) {
+                broadcastTrade(trade);
+            }
         }
-
-        broadcastTrade(t);
     }
 
-    /**
-     * Sets up the Villages behaviours
-     */
-    public abstract void setup();
-
-    /**
-     * Verifies if trade can be accepted, according to the village's standards
-     * @param t
-     * @return true if trade can be accepted, false otherwise
-     */
-    public boolean canAcceptTrade(Trade t){
-        return canPromiseTrade(t.getRequest());
+    public void setup() {
+        addBehaviour(new LifeCycleBehaviour(this));
+        addBehaviour(new HandleProposalBehaviour());
+        addBehaviour(new HandleCounterProposalAnswerBehaviour());
     }
 
     /**
@@ -183,13 +185,6 @@ public abstract class Village extends BaseAgent {
     public abstract boolean wantToAcceptTrade(Trade t);
 
     /**
-     * Verifies if a trade should be performed base on the village's current status
-     * @param r
-     * @return true if should be performed, false otherwise
-     */
-    public abstract boolean shouldProposeTrade(Resource r);
-
-    /**
      * Selects the best trade based of the received counter proposals
      * @param trades
      * @return Best trade
@@ -197,16 +192,15 @@ public abstract class Village extends BaseAgent {
     public abstract int selectBestTrade(List<Trade> trades);
 
     /**
-     * Create a trade to broadcast to other villages
-     * @param r Resource to request
-     * @return Trade to broadcast
-     */
-    public abstract Trade createProposingTrade(Resource r);
-
-    /**
      * Decide a counter propose for a given received trade proposal
      * @param t Received trade proposal
      * @return Trade counter proposal
      */
     public abstract Trade decideCounterPropose(Trade t);
+
+    /**
+     * Returns all the trades that a village wants to make at a certain point in time
+     * @return List of desired trades
+     */
+    public abstract List<Trade> generateDesiredTrades();
 }

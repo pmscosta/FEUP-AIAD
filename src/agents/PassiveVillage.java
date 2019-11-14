@@ -1,12 +1,9 @@
 package agents;
 
-import behaviour.HandleTradeBehaviour;
-import behaviour.LifeCycleBehaviour;
-import jade.lang.acl.ACLMessage;
-import jade.lang.acl.MessageTemplate;
 import utils.Resource;
 import utils.Trade;
 
+import java.util.LinkedList;
 import java.util.List;
 
 public class PassiveVillage extends Village {
@@ -40,35 +37,6 @@ public class PassiveVillage extends Village {
         return Math.min(target_survival_quantity, midpoint_quantity);
     }
 
-    @Override
-    public void setup() {
-        addBehaviour(new LifeCycleBehaviour(this));
-
-        // TODO: Not match all :upside_down_smile:
-        MessageTemplate mt =
-                MessageTemplate.or(
-                        MessageTemplate.MatchPerformative(ACLMessage.CFP),
-                        MessageTemplate.MatchPerformative(ACLMessage.ACCEPT_PROPOSAL)
-                );
-
-        addBehaviour(new HandleTradeBehaviour(this, mt));
-    }
-
-    @Override
-    public boolean shouldProposeTrade(Resource r) {
-        return r.getAmount() < RESOURCES_THRESHOLD;
-    }
-
-    @Override
-    public Trade createProposingTrade(Resource r){
-
-        Resource most_abundant_resource = getMostAbundantResource();
-        int quantity = getTradeResourceQuantity(r, most_abundant_resource);
-
-        return new Trade(
-                new Resource(r.getType(), quantity),
-                new Resource(most_abundant_resource.getType(), quantity));
-    }
 
     @Override
     public boolean wantToAcceptTrade(Trade t) {
@@ -80,7 +48,7 @@ public class PassiveVillage extends Village {
     }
 
     @Override
-    public int selectBestTrade(List<Trade> trades){
+    public int selectBestTrade(List<Trade> trades) {
         return 0;
     }
 
@@ -90,4 +58,22 @@ public class PassiveVillage extends Village {
         return t;
     }
 
+    @Override
+    public List<Trade> generateDesiredTrades() {
+        List<Trade> trades = new LinkedList<>();
+        Resource most_abundant_resource = getMostAbundantResource();
+
+        for (Resource r : resources.values()) {
+            if (r.getAmount() < RESOURCES_THRESHOLD) {
+                int quantity = getTradeResourceQuantity(r, most_abundant_resource);
+
+                trades.add(new Trade(
+                        new Resource(r.getType(), quantity),
+                        new Resource(most_abundant_resource.getType(), quantity))
+                );
+            }
+        }
+
+        return trades;
+    }
 }

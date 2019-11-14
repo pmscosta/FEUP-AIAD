@@ -45,6 +45,11 @@ public class AttackerBehaviour extends TickerBehaviour {
             msg.setOntology("attack");
 
             AMSAgentDescription[] village_descriptions = attacker.findVillages();
+
+            if (village_descriptions.length == 0) {
+                return;
+            }
+
             msg.addReceiver(
                     village_descriptions[ThreadLocalRandom.current().nextInt(village_descriptions.length)].getName()
             );

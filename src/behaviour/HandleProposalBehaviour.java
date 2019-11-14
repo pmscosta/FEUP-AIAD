@@ -28,12 +28,12 @@ public class HandleProposalBehaviour extends CyclicBehaviour {
                 ACLMessage reply = msg.createReply();
 
                 if (village.canAcceptTrade(trade) && village.wantToAcceptTrade(trade)) {
+                    Trade counter_propose = village.decideCounterPropose(trade);
+
                     /*  start accounting for the promised quantity
                      *  since we are the receiver, that resource is the request
                      */
-                    village.accountForNewTrade(trade.getRequest());
-
-                    Trade counter_propose = village.decideCounterPropose(trade);
+                    village.accountForNewTrade(counter_propose.getRequest());
 
                     reply.setContentObject(counter_propose);
                     // Printer.safePrintf("\t%s [RECEIVER]: Im Proposing for id [%s]", this.getAgent().getLocalName(), reply.getConversationId());

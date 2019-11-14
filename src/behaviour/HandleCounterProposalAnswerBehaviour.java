@@ -5,12 +5,9 @@ import jade.core.behaviours.CyclicBehaviour;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import jade.lang.acl.UnreadableException;
-import utils.Printer;
 import utils.Trade;
 
 import java.io.IOException;
-
-import static utils.Printer.safePrintf;
 
 /**
  * Waits for responses to sent counter proposals (my counter proposal may be Accepted or Rejected by initiators)

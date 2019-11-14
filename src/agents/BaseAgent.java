@@ -1,16 +1,12 @@
 package agents;
 
-import behaviour.IInitTradeBehaviour;
-import behaviour.InitTradeBehaviour;
+import behaviour.TradeInitiatorBehaviour;
 import jade.core.Agent;
 import jade.domain.AMSService;
 import jade.domain.FIPAAgentManagement.AMSAgentDescription;
 import jade.domain.FIPAAgentManagement.SearchConstraints;
-import jade.lang.acl.ACLMessage;
-import protocol.ACLObjectMessage;
 import utils.Trade;
 
-import java.io.IOException;
 import java.util.Arrays;
 
 import static utils.Printer.safePrintf;
@@ -46,6 +42,6 @@ public abstract class BaseAgent extends Agent {
      * Broadcasts a trade to all the other agents
      */
     public final void broadcastTrade(Trade trade) {
-        this.addBehaviour(new IInitTradeBehaviour(this, trade));
+        this.addBehaviour(new TradeInitiatorBehaviour(this, trade));
     }
 }

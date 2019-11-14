@@ -2,10 +2,7 @@ package agents;
 
 import behaviour.HandleCounterProposalAnswerBehaviour;
 import behaviour.HandleProposalBehaviour;
-import behaviour.HandleTradeBehaviour;
 import behaviour.LifeCycleBehaviour;
-import jade.lang.acl.ACLMessage;
-import jade.lang.acl.MessageTemplate;
 import utils.Resource;
 import utils.Trade;
 

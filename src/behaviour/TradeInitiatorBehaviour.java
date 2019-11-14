@@ -8,7 +8,6 @@ import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import jade.lang.acl.UnreadableException;
 import protocol.ACLObjectMessage;
-import utils.Printer;
 import utils.Trade;
 
 import java.io.IOException;
@@ -18,7 +17,7 @@ import java.util.List;
 /**
  * All steps done by the trade initiator
  */
-public class IInitTradeBehaviour extends Behaviour {
+public class TradeInitiatorBehaviour extends Behaviour {
 
     enum TradeStep {
         BROADCAST, AWAIT_COUNTER_OFFERS, DECIDE_BEST_OFFER, AWAIT_FINAL_CONFIRMATION, DONE
@@ -34,7 +33,7 @@ public class IInitTradeBehaviour extends Behaviour {
 
     List<ACLMessage> propose_messages = new ArrayList<>();
 
-    public IInitTradeBehaviour(Agent agent, Trade trade) {
+    public TradeInitiatorBehaviour(Agent agent, Trade trade) {
         super(agent);
         this.trade = trade;
         this.trade_id = String.format("%s-%s-%s-%d",

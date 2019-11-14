@@ -3,7 +3,7 @@ package behaviour;
 import agents.Village;
 import exceptions.NotEnoughResources;
 import utils.Resource;
-import utils.ResourceLogger;
+import utils.Logger;
 
 import static utils.Printer.safePrintf;
 
@@ -36,8 +36,8 @@ public class LifeCycleBehaviour extends TimeTickerBehaviour {
     }
 
     public void logStuff() {
-        ResourceLogger.getInstance().add(String.format(
-                "%d %s %d %d %d %d (%d)\n",
+        Logger.getInstance().add(String.format(
+                "[Village Status] %d %s %d %d %d %d [Sum = %d]\n",
                 this.village.tick_num++,
                 this.village.getVillageName(),
                 this.village.getResources().get(Resource.ResourceType.STONE).getAmount(),

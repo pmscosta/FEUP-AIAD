@@ -28,4 +28,4 @@ MTPs-Main-Container.txt
 hs_err_pid*
 
 # logs
-resource_log.txt
+log.txt

@@ -90,7 +90,7 @@ public class TradeInitiatorBehaviour extends Behaviour {
             msg.setConversationId(trade_id);
             // Printer.safePrintf("\t%s [INITIATOR]: in Brodcast for id [%s]", this.getAgent().getLocalName(), trade_id);
 
-            AMSAgentDescription[] other_villages = village.getOtherAgents();
+            AMSAgentDescription[] other_villages = village.findVillages();
             num_contacted_villages = other_villages.length;
 
             for (AMSAgentDescription ad : other_villages) {

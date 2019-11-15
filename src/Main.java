@@ -13,9 +13,9 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
-import utils.Printer;
 import utils.Resource;
 import utils.ShutdownHandler;
+import utils.TerminationScheduler;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -41,6 +41,8 @@ public class Main {
 
         // Add attacker
         mainContainer.acceptNewAgent("attacker", new Attacker()).start();
+
+        TerminationScheduler.scheduleTermination(mainContainer);
     }
 
     private static final LinkedList<Village> parseVillagesFile(String file_path) throws IOException, ParserConfigurationException, SAXException {

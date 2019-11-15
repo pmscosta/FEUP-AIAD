@@ -21,8 +21,8 @@
     </village>
 
     <village>
-        <name>Germany</name>
-        <type>Greedy</type>
+        <name>France</name>
+        <type>Passive</type>
         <consumption_rate>5</consumption_rate>
         <clay_production_rate>10</clay_production_rate>
         <food_production_rate>10</food_production_rate>
@@ -31,8 +31,8 @@
     </village>
 
     <village>
-        <name>France</name>
-        <type>Passive</type>
+        <name>Germany</name>
+        <type>Smart</type>
         <consumption_rate>5</consumption_rate>
         <clay_production_rate>10</clay_production_rate>
         <food_production_rate>10</food_production_rate>

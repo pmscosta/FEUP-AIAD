@@ -20,17 +20,20 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 
 public class Main {
+
+    private static ContainerController mainContainer;
 
     public static void main(String[] args) throws StaleProxyException, IOException, ParserConfigurationException, SAXException {
         Runtime rt = Runtime.instance();
         java.lang.Runtime.getRuntime().addShutdownHook(new ShutdownHandler());
 
         Profile profile = new ProfileImpl();
-        ContainerController mainContainer = rt.createMainContainer(profile);
+        mainContainer = rt.createMainContainer(profile);
 
         // Add village(s)
         for (Village village : parseVillagesFile("experiments/experiment1.xml")) {
@@ -49,8 +52,9 @@ public class Main {
         TerminationScheduler.scheduleTermination(mainContainer);
     }
 
-    private static final LinkedList<Village> parseVillagesFile(String file_path) throws IOException, ParserConfigurationException, SAXException {
+    private static final LinkedList<Village> parseVillagesFile(String file_path) throws IOException, ParserConfigurationException, SAXException, StaleProxyException {
         LinkedList<Village> villages = new LinkedList<>();
+        HashSet<String> village_names = new HashSet<>();
 
         File inputFile = new File(file_path);
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
@@ -66,6 +70,13 @@ public class Main {
                 Element village_element = (Element) village_node;
 
                 String name = village_element.getElementsByTagName("name").item(0).getTextContent();
+                if (village_names.contains(name)) {
+                    Printer.safePrintf("Repeated village name '%s'\n", name);
+                    mainContainer.kill();
+                    System.exit(1);
+                }
+                village_names.add(name);
+
                 String type = village_element.getElementsByTagName("type").item(0).getTextContent();
                 int consumption_rate = Integer.parseInt(
                         village_element.getElementsByTagName("consumption_rate").item(0).getTextContent()

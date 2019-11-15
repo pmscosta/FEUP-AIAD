@@ -1,0 +1,62 @@
+<?xml version = "1.0"?>
+<villages>
+    <village>
+        <name>Aquaenium</name>
+        <type>Passive</type>
+        <consumption_rate>5</consumption_rate>
+        <clay_production_rate>0</clay_production_rate>
+        <food_production_rate>12</food_production_rate>
+        <stone_production_rate>13</stone_production_rate>
+        <wood_production_rate>12</wood_production_rate>
+    </village>
+
+    <village>
+        <name>Brigantium</name>
+        <type>Passive</type>
+        <consumption_rate>5</consumption_rate>
+        <clay_production_rate>15</clay_production_rate>
+        <food_production_rate>0</food_production_rate>
+        <stone_production_rate>11</stone_production_rate>
+        <wood_production_rate>12</wood_production_rate>
+    </village>
+
+    <village>
+        <name>Clausentum</name>
+        <type>Smart</type>
+        <consumption_rate>5</consumption_rate>
+        <clay_production_rate>9</clay_production_rate>
+        <food_production_rate>7</food_production_rate>
+        <stone_production_rate>2</stone_production_rate>
+        <wood_production_rate>8</wood_production_rate>
+    </village>
+
+    <village>
+        <name>Devictrix</name>
+        <type>Smart</type>
+        <consumption_rate>5</consumption_rate>
+        <clay_production_rate>9</clay_production_rate>
+        <food_production_rate>9</food_production_rate>
+        <stone_production_rate>8</stone_production_rate>
+        <wood_production_rate>0</wood_production_rate>
+    </village>
+
+    <village>
+        <name>Emerictrix</name>
+        <type>Greedy</type>
+        <consumption_rate>5</consumption_rate>
+        <clay_production_rate>0</clay_production_rate>
+        <food_production_rate>7</food_production_rate>
+        <stone_production_rate>6</stone_production_rate>
+        <wood_production_rate>7</wood_production_rate>
+    </village>
+
+    <village>
+        <name>Florentia</name>
+        <type>Greedy</type>
+        <consumption_rate>5</consumption_rate>
+        <clay_production_rate>6</clay_production_rate>
+        <food_production_rate>1</food_production_rate>
+        <stone_production_rate>7</stone_production_rate>
+        <wood_production_rate>6</wood_production_rate>
+    </village>
+</villages>

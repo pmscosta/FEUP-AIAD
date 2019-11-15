@@ -13,9 +13,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
-import utils.Resource;
-import utils.ShutdownHandler;
-import utils.TerminationScheduler;
+import utils.*;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -35,7 +33,7 @@ public class Main {
         ContainerController mainContainer = rt.createMainContainer(profile);
 
         // Add village(s)
-        for (Village village : parseVillagesFile("villages.xml")) {
+        for (Village village : parseVillagesFile("experiments/experiment1.xml")) {
             mainContainer.acceptNewAgent(village.getVillageName(), village).start();
         }
 

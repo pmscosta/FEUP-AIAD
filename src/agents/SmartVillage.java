@@ -3,13 +3,7 @@ package agents;
 import utils.Resource;
 import utils.Trade;
 
-import utils.Printer;
-import utils.Resource;
-import utils.Trade;
-
 import java.util.ArrayList;
-
-import java.util.Arrays;
 import java.util.List;
 
 public class SmartVillage extends Village {
@@ -20,7 +14,6 @@ public class SmartVillage extends Village {
     private static final double MAX_SMART_RATIO_VALUE = 1.5;
     private static int OK_THRESHOLD;
     private static final double OPTIMAL_SMART_RATIO_VALUE = 2.0;
-
     private static final int TARGET_SURVIVAL_TIME = 5;
 
     SmartVillage(String name) {
@@ -63,7 +56,6 @@ public class SmartVillage extends Village {
         if (r.getAmount() > THRESHOLD) {
             return MAX_SMART_RATIO_VALUE;
         }
-
 
         return MIN_SMART_RATIO_VALUE + ((MAX_SMART_RATIO_VALUE - MIN_SMART_RATIO_VALUE) / THRESHOLD) * r.getAmount();
     }
@@ -122,14 +114,12 @@ public class SmartVillage extends Village {
 
         //if we are in a critical situation, don't even try to counter propose
         if (isInCriticalSituation()) {
-
             return t;
         }
 
         List<Resource> my_sorted_resources = getSortedResources();
 
         if (t.getRequest().getType() == my_sorted_resources.get(2).getType()) {
-
             return new Trade(t.getSource(),
                     new Resource(t.getRequest().getType(), (int) (0.9 * t.getRequest().getAmount())),
                     t.getOffer()
@@ -147,7 +137,6 @@ public class SmartVillage extends Village {
         Resource most_depleted_resource = this.getMostDepletedResource();
         Resource most_abundant_resource = this.getMostAbundantResource();
 
-
         double ratio = calculateDesiredRatio(most_depleted_resource);
         int amount = getTargetSurvivalQuantity(TARGET_SURVIVAL_TIME);
 
@@ -162,8 +151,10 @@ public class SmartVillage extends Village {
 
         //if there are any passive villages in the system, just send a really good trade since they will accept it
         if (passiveVillagesExist()) {
-            Trade bonusTrade = new Trade(getVillageName(), request, new Resource(most_abundant_resource.getType(), (int) (amount / OPTIMAL_SMART_RATIO_VALUE)));
-
+            Trade bonusTrade = new Trade(getVillageName(),
+                    request,
+                    new Resource(most_abundant_resource.getType(),
+                            (int) (amount / OPTIMAL_SMART_RATIO_VALUE)));
             trades.add(bonusTrade);
         }
 

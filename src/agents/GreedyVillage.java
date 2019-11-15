@@ -23,6 +23,7 @@ public class GreedyVillage extends Village {
 
     public GreedyVillage(String name, int resource_consumption, List<Resource> production_resources) {
         super(name, resource_consumption, production_resources);
+        villagesInfo.put(getVillageName(), "Greedy");
     }
 
     private double calculateDesiredRatio(Resource r) {
@@ -60,7 +61,7 @@ public class GreedyVillage extends Village {
         List<Resource> my_sorted_resources = getSortedResources();
 
         if (t.getRequest().getType() == my_sorted_resources.get(2).getType()) {
-            return new Trade(
+            return new Trade(t.getSource(),
                     new Resource(t.getRequest().getType(), (int) (0.9 * t.getRequest().getAmount())),
                     t.getOffer()
             );
@@ -78,7 +79,7 @@ public class GreedyVillage extends Village {
         double ratio = calculateDesiredRatio(most_depleted_resource);
         int amount = getTargetSurvivalQuantity(TARGET_SURVIVAL_TIME);
 
-        Trade trade = new Trade(
+        Trade trade = new Trade(getVillageName(),
                 new Resource(most_depleted_resource.getType(), amount),
                 new Resource(most_abundant_resource.getType(), (int) (amount/ratio))
         );

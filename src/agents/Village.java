@@ -19,6 +19,8 @@ import static utils.Printer.safePrintf;
 
 public abstract class Village extends BaseAgent {
 
+    public static HashMap<String, String> villagesInfo = new HashMap<>();
+
     private static final int DEFAULT_RESOURCE_CONSUMPTION = 5;
 
     private final String name;

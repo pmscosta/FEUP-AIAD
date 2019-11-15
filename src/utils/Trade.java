@@ -6,16 +6,22 @@ public final class Trade implements Serializable {
     private final Resource request;
     private final Resource offer;
     private final double ratio;
+    private final String source;
 
     @Override
     public Object clone() throws CloneNotSupportedException {
         return super.clone();
     }
 
-    public Trade(Resource request, Resource offer) {
+    public Trade(String source, Resource request, Resource offer) {
+        this.source = source;
         this.request = request;
         this.offer = offer;
         this.ratio = request.getAmount() / offer.getAmount();
+    }
+
+    public String getSource(){
+        return source;
     }
 
     public Resource getOffer() {

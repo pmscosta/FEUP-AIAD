@@ -37,7 +37,7 @@ public class LifeCycleBehaviour extends TimeTickerBehaviour {
 
     public void logStuff() {
         Logger.getInstance().add(String.format(
-                "[Village Status] %d %s %d %d %d %d [Sum = %d]\n",
+                "[Village Status] %d %s %d %d %d %d [Resources Sum = %d]\n",
                 this.village.tick_num++,
                 this.village.getVillageName(),
                 this.village.getResources().get(Resource.ResourceType.STONE).getAmount(),

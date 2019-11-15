@@ -34,10 +34,16 @@ public class Main {
 
         // Add village(s)
         for (Village village : parseVillagesFile("experiments/experiment1.xml")) {
+            Printer.safePrintf("Initiating Village '%s'", village.getVillageName());
+            Logger.getInstance().add(
+                    String.format("[Village Creation] Initiating Village %s\n", village.getVillageName())
+            );
             mainContainer.acceptNewAgent(village.getVillageName(), village).start();
         }
 
         // Add attacker
+        Printer.safePrintf("\nInitiating Attacker\n");
+        Logger.getInstance().add("[Attacker Creation] Initiating Attacker\n\n");
         mainContainer.acceptNewAgent("attacker", new Attacker()).start();
 
         TerminationScheduler.scheduleTermination(mainContainer);

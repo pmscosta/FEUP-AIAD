@@ -5,7 +5,6 @@ import jade.core.behaviours.CyclicBehaviour;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import jade.lang.acl.UnreadableException;
-import utils.Printer;
 import utils.Trade;
 
 import java.io.IOException;
@@ -23,12 +22,10 @@ public class HandleProposalBehaviour extends CyclicBehaviour {
 
         if (msg != null) {
             try {
-                // Printer.safePrintf("\t%s [RECEIVER]: Received Proposal", this.getAgent().getLocalName());
                 Trade trade = (Trade) msg.getContentObject();
                 Village village = (Village) this.getAgent();
                 ACLMessage reply = msg.createReply();
 
-                // TODO: CANACCEPTTRADE MUST BE CHECKED AFTER DECIDECOUNTERPROPOSE -> IF RATIOS CHANGE AGAINST ME (less than 1) there may be issues (potician issues!!!)
                 if (village.canAcceptTrade(trade) && village.wantToAcceptTrade(trade)) {
                     Trade counter_propose = village.decideCounterPropose(trade);
 
@@ -38,10 +35,8 @@ public class HandleProposalBehaviour extends CyclicBehaviour {
                     village.accountForNewTrade(counter_propose.getRequest());
 
                     reply.setContentObject(counter_propose);
-                    // Printer.safePrintf("\t%s [RECEIVER]: Im Proposing for id [%s]", this.getAgent().getLocalName(), reply.getConversationId());
                     reply.setPerformative(ACLMessage.PROPOSE);
                 } else {
-                    // Printer.safePrintf("\t%s [RECEIVER]: Im Refusing for id [%s]", this.getAgent().getLocalName(), reply.getConversationId());
                     reply.setPerformative(ACLMessage.REFUSE);
                 }
                 this.myAgent.send(reply);

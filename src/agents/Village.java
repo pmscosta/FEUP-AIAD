@@ -136,10 +136,10 @@ public abstract class Village extends BaseAgent {
          */
         this.closeOpenTrade(is_proposer ? t.getOffer() : t.getRequest());
 
-        int a1 = this.getResources().get(Resource.ResourceType.STONE).getAmount();
-        int a2 = this.getResources().get(Resource.ResourceType.WOOD).getAmount();
-        int a3 = this.getResources().get(Resource.ResourceType.FOOD).getAmount();
-        int a4 = this.getResources().get(Resource.ResourceType.CLAY).getAmount();
+        int initial_stone_amount = this.getResources().get(Resource.ResourceType.STONE).getAmount();
+        int initial_wood_amount = this.getResources().get(Resource.ResourceType.WOOD).getAmount();
+        int initial_food_amount = this.getResources().get(Resource.ResourceType.FOOD).getAmount();
+        int initial_clay_amount = this.getResources().get(Resource.ResourceType.CLAY).getAmount();
 
         try {
             this.resources.get(request.getType()).produceAmount(request.getAmount());
@@ -149,19 +149,19 @@ public abstract class Village extends BaseAgent {
             e.printStackTrace();
         }
 
-        int b1 = this.getResources().get(Resource.ResourceType.STONE).getAmount();
-        int b2 = this.getResources().get(Resource.ResourceType.WOOD).getAmount();
-        int b3 = this.getResources().get(Resource.ResourceType.FOOD).getAmount();
-        int b4 = this.getResources().get(Resource.ResourceType.CLAY).getAmount();
+        int final_stone_amount = this.getResources().get(Resource.ResourceType.STONE).getAmount();
+        int final_wood_amount = this.getResources().get(Resource.ResourceType.WOOD).getAmount();
+        int final_food_amount = this.getResources().get(Resource.ResourceType.FOOD).getAmount();
+        int final_clay_amount = this.getResources().get(Resource.ResourceType.CLAY).getAmount();
 
         Logger.getInstance().add(String.format(
                 "[Trade Applying] %d %s %d %d %d %d\n",
                 this.tick_num,
                     this.getVillageName(),
-                    b1-a1,
-                    b2-a2,
-                    b3-a3,
-                    b4-a4
+                    final_stone_amount-initial_stone_amount,
+                    final_wood_amount-initial_wood_amount,
+                    final_food_amount-initial_food_amount,
+                    final_clay_amount-initial_clay_amount
                 ));
 
         safePrintf("%s: As a %s, just did this trade:", getVillageName(), is_proposer ? "proposer" : "responder");

@@ -35,20 +35,18 @@ public class LifeCycleBehaviour extends TimeTickerBehaviour {
         village.proposeTrades(village.generateDesiredTrades());
     }
 
-    public void logStuff() {
-        Logger.getInstance().add(String.format(
-                "[Village Status] %d %s %d %d %d %d [Resources Sum = %d]\n",
-                this.village.tick_num++,
+    @Override
+    protected void onTick() {
+        consumeResources();
+        produceResources();
+
+        Logger.getInstance().logVillageStatus(
+                this.village.tick_num,
                 this.village.getVillageName(),
-                this.village.getResources().get(Resource.ResourceType.STONE).getAmount(),
-                this.village.getResources().get(Resource.ResourceType.WOOD).getAmount(),
-                this.village.getResources().get(Resource.ResourceType.FOOD).getAmount(),
-                this.village.getResources().get(Resource.ResourceType.CLAY).getAmount(),
-                this.village.getResources().get(Resource.ResourceType.STONE).getAmount()+
-                        this.village.getResources().get(Resource.ResourceType.WOOD).getAmount()+
-                        this.village.getResources().get(Resource.ResourceType.FOOD).getAmount()+
-                        this.village.getResources().get(Resource.ResourceType.CLAY).getAmount()
-        ));
+                this.village.getResources()
+        );
+
+        village.tick_num++;
 
         safePrintf("%s: %s-(%d) %s-(%d) %s-(%d) %s-(%d)", this.village.getVillageName(),
                 Resource.ResourceType.STONE,
@@ -60,14 +58,6 @@ public class LifeCycleBehaviour extends TimeTickerBehaviour {
                 Resource.ResourceType.CLAY,
                 this.village.getResources().get(Resource.ResourceType.CLAY).getAmount()
         );
-    }
-
-    @Override
-    protected void onTick() {
-        consumeResources();
-        produceResources();
-
-        logStuff();
 
         proposeTrades();
     }

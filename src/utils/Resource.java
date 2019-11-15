@@ -3,7 +3,6 @@ package utils;
 import exceptions.NotEnoughResources;
 
 import java.io.Serializable;
-import java.util.Objects;
 
 public class Resource implements Serializable, Comparable {
 

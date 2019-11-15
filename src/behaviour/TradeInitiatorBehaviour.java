@@ -62,19 +62,15 @@ public class TradeInitiatorBehaviour extends Behaviour {
     public void action() {
         switch (trade_step) {
             case BROADCAST:
-                // Printer.safePrintf("\t%s [INITIATOR]: in Brodcast", this.getAgent().getLocalName());
                 broadcastTrade();
                 break;
             case AWAIT_COUNTER_OFFERS:
-                // Printer.safePrintf("\t%s [INITIATOR]: in AwaitCounterOffers", this.getAgent().getLocalName());
                 awaitCounterOffers();
                 break;
             case DECIDE_BEST_OFFER:
-                // Printer.safePrintf("\t%s [INITIATOR]: in DecideBestOffer", this.getAgent().getLocalName());
                 decideBestOffer();
                 break;
             case AWAIT_FINAL_CONFIRMATION:
-                // Printer.safePrintf("\t%s [INITIATOR]: in AwaitFinalConfirmation", this.getAgent().getLocalName());
                 awaitFinalConfirmation();
                 break;
             default:
@@ -88,7 +84,6 @@ public class TradeInitiatorBehaviour extends Behaviour {
         try {
             ACLObjectMessage msg = new ACLObjectMessage(ACLMessage.CFP, trade);
             msg.setConversationId(trade_id);
-            // Printer.safePrintf("\t%s [INITIATOR]: in Brodcast for id [%s]", this.getAgent().getLocalName(), trade_id);
 
             AMSAgentDescription[] other_villages = village.findVillages();
             num_contacted_villages = other_villages.length;
@@ -119,7 +114,6 @@ public class TradeInitiatorBehaviour extends Behaviour {
 
             propose_messages.add(msg);
             num_counter_offer_replies++;
-            // Printer.safePrintf("\t%s [INITIATOR]: in awaitCounterOffers() got ((%d/%d)) for id [%s]", this.getAgent().getLocalName(), num_counter_offer_replies, num_contacted_villages, msg.getConversationId());
         }
 
         if (num_counter_offer_replies == 0)   {

@@ -1,6 +1,5 @@
 package agents;
 
-import utils.Printer;
 import utils.Resource;
 import utils.Trade;
 

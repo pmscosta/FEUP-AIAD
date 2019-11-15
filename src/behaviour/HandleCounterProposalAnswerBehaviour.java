@@ -36,7 +36,6 @@ public class HandleCounterProposalAnswerBehaviour extends CyclicBehaviour {
 
     private void handleAcceptProposal(ACLMessage msg) {
         try {
-            // Printer.safePrintf("\t%s [RECEIVER]: In finallizing", this.getAgent().getLocalName());
             Trade trade = (Trade) msg.getContentObject();
             Village village = ((Village) this.getAgent());
 
@@ -47,7 +46,6 @@ public class HandleCounterProposalAnswerBehaviour extends CyclicBehaviour {
             reply.setContentObject(trade);
             this.myAgent.send(reply);
         } catch (UnreadableException | IOException e) {
-            // safePrintf("Could not cast received accept proposal's content object to a Trade!");
             e.printStackTrace();
         }
     }

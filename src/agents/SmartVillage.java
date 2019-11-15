@@ -11,7 +11,6 @@ public class SmartVillage extends Village {
     private static int MIN_THRESHOLD;
     private static final int THRESHOLD = (int) (Resource.DEFAULT_AMOUNT * 0.9);
     private static final double MIN_SMART_RATIO_VALUE = 0.8;
-    private static final double MID_SMART_RATIO_VALUE = 1.1;
     private static final double MAX_SMART_RATIO_VALUE = 1.5;
     private static final int TARGET_SURVIVAL_TIME = 5;
 

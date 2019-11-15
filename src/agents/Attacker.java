@@ -1,7 +1,6 @@
 package agents;
 
 import behaviour.AttackerBehaviour;
-import utils.Printer;
 
 public class Attacker extends BaseAgent {
 

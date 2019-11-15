@@ -1,33 +1,26 @@
 package agents;
 
-<<<<<<< Updated upstream
 import utils.Resource;
 import utils.Trade;
 
-=======
 import utils.Printer;
 import utils.Resource;
 import utils.Trade;
 
 import java.util.ArrayList;
->>>>>>> Stashed changes
+
 import java.util.Arrays;
 import java.util.List;
 
 public class SmartVillage extends Village {
 
     private static int MIN_THRESHOLD;
-<<<<<<< Updated upstream
     private static final int THRESHOLD = (int) (Resource.DEFAULT_AMOUNT * 0.9);
     private static final double MIN_SMART_RATIO_VALUE = 0.8;
     private static final double MAX_SMART_RATIO_VALUE = 1.5;
-=======
     private static int OK_THRESHOLD;
-    private static final int THRESHOLD = (int) (Resource.DEFAULT_AMOUNT * 0.9);
-    private static final double MIN_SMART_RATIO_VALUE = 0.8;
-    private static final double MAX_SMART_RATIO_VALUE = 1.5;
     private static final double OPTIMAL_SMART_RATIO_VALUE = 2.0;
->>>>>>> Stashed changes
+
     private static final int TARGET_SURVIVAL_TIME = 5;
 
     SmartVillage(String name) {
@@ -40,19 +33,10 @@ public class SmartVillage extends Village {
 
     public SmartVillage(String name, int resource_consumption, List<Resource> production_resources) {
         super(name, resource_consumption, production_resources);
-<<<<<<< Updated upstream
+
         MIN_THRESHOLD = getResourceConsumption() * 2;
-    }
-
-    private boolean isInCriticalSituation(){
-        return getMostDepletedResource().getAmount() < MIN_THRESHOLD;
-    }
-
-=======
-
         // the minimum is threshold is the amount needed to survive two ticks
         // any quantity below that, we are in danger
-        MIN_THRESHOLD = getResourceConsumption() * 2;
         OK_THRESHOLD = getResourceConsumption() * 5;
         villagesInfo.put(getVillageName(), "Smart");
     }
@@ -74,7 +58,6 @@ public class SmartVillage extends Village {
         return true;
     }
 
->>>>>>> Stashed changes
     // y = ((1.5-0.2)/60)*x+0.2
     private double calculateDesiredRatio(Resource r) {
         if (r.getAmount() > THRESHOLD) {
@@ -82,11 +65,7 @@ public class SmartVillage extends Village {
         }
 
 
-<<<<<<< Updated upstream
-        return MIN_SMART_RATIO_VALUE + ((MAX_SMART_RATIO_VALUE- MIN_SMART_RATIO_VALUE)/THRESHOLD)*r.getAmount();
-=======
         return MIN_SMART_RATIO_VALUE + ((MAX_SMART_RATIO_VALUE - MIN_SMART_RATIO_VALUE) / THRESHOLD) * r.getAmount();
->>>>>>> Stashed changes
     }
 
     @Override
@@ -117,16 +96,6 @@ public class SmartVillage extends Village {
 
     @Override
     public int selectBestTrade(List<Trade> trades) {
-<<<<<<< Updated upstream
-        int best_trade_index = 0;
-
-        for (int i = 1; i < trades.size(); i++) {
-            if (trades.get(i).getRatio(false) > trades.get(best_trade_index).getRatio(false)) {
-                best_trade_index = i;
-            }
-        }
-
-=======
         int best_trade_index = -1;
         double best_ratio = Integer.MIN_VALUE;
 
@@ -144,7 +113,6 @@ public class SmartVillage extends Village {
                 best_ratio = trades.get(i).getRatio(false);
             }
         }
->>>>>>> Stashed changes
         return best_trade_index;
     }
 
@@ -153,22 +121,16 @@ public class SmartVillage extends Village {
     public Trade decideCounterPropose(Trade t) {
 
         //if we are in a critical situation, don't even try to counter propose
-<<<<<<< Updated upstream
-        if(isInCriticalSituation()){
-=======
         if (isInCriticalSituation()) {
->>>>>>> Stashed changes
+
             return t;
         }
 
         List<Resource> my_sorted_resources = getSortedResources();
 
         if (t.getRequest().getType() == my_sorted_resources.get(2).getType()) {
-<<<<<<< Updated upstream
-            return new Trade(
-=======
+
             return new Trade(t.getSource(),
->>>>>>> Stashed changes
                     new Resource(t.getRequest().getType(), (int) (0.9 * t.getRequest().getAmount())),
                     t.getOffer()
             );
@@ -180,12 +142,8 @@ public class SmartVillage extends Village {
     @SuppressWarnings("Duplicates")
     @Override
     public List<Trade> generateDesiredTrades() {
-<<<<<<< Updated upstream
-=======
-
         List<Trade> trades = new ArrayList<>();
 
->>>>>>> Stashed changes
         Resource most_depleted_resource = this.getMostDepletedResource();
         Resource most_abundant_resource = this.getMostAbundantResource();
 
@@ -193,14 +151,6 @@ public class SmartVillage extends Village {
         double ratio = calculateDesiredRatio(most_depleted_resource);
         int amount = getTargetSurvivalQuantity(TARGET_SURVIVAL_TIME);
 
-<<<<<<< Updated upstream
-        Trade trade = new Trade(
-                new Resource(most_depleted_resource.getType(), amount),
-                new Resource(most_abundant_resource.getType(), (int) (amount / ratio))
-        );
-
-        return Arrays.asList(trade);
-=======
         Resource request = new Resource(most_depleted_resource.getType(), amount);
 
         Trade trade = new Trade(getVillageName(),
@@ -218,6 +168,5 @@ public class SmartVillage extends Village {
         }
 
         return trades;
->>>>>>> Stashed changes
     }
 }

@@ -24,6 +24,7 @@ public class PassiveVillage extends Village {
 
     public PassiveVillage(String name, int resource_consumption, List<Resource> production_resources) {
         super(name, resource_consumption, production_resources);
+        villagesInfo.put(getVillageName(), "Passive");
     }
 
     private int getTradeResourceQuantity(Resource request, Resource offer) {
@@ -63,7 +64,7 @@ public class PassiveVillage extends Village {
             if (r.getAmount() < RESOURCES_THRESHOLD) {
                 int quantity = getTradeResourceQuantity(r, most_abundant_resource);
 
-                trades.add(new Trade(
+                trades.add(new Trade(getVillageName(),
                         new Resource(r.getType(), quantity),
                         new Resource(most_abundant_resource.getType(), quantity))
                 );

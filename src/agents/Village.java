@@ -26,12 +26,7 @@ public abstract class Village extends BaseAgent {
     private final String name;
     private final int resource_consumption;
     private final List<Resource> production_resources;
-    ConcurrentHashMap<ResourceType, Resource> resources = new ConcurrentHashMap<ResourceType, Resource>() {{ // Cannot have anonymous inner class in order to be compliant with Java 8
-        put(ResourceType.CLAY, new Resource(ResourceType.CLAY));
-        put(ResourceType.FOOD, new Resource(ResourceType.FOOD));
-        put(ResourceType.STONE, new Resource(ResourceType.STONE));
-        put(ResourceType.WOOD, new Resource(ResourceType.WOOD));
-    }};
+    protected final ConcurrentHashMap<ResourceType, Resource> resources;
 
     ConcurrentHashMap<ResourceType, Integer> openTrades = new ConcurrentHashMap<>();
     public int tick_num = 0;
@@ -42,18 +37,17 @@ public abstract class Village extends BaseAgent {
         });
     }
 
-    Village(String name) {
-        this(name, DEFAULT_RESOURCE_CONSUMPTION);
-    }
-
-    Village(String name, int resource_consumption) {
-        this(name, resource_consumption, ResourceRandomizer.randomizeProduction(resource_consumption));
-    }
-
-    Village(String name, int resource_consumption, List<Resource> production_resources) {
+    Village(String name, int initial_resources_amount, int resource_consumption, List<Resource> production_resources) {
         this.name = name;
         this.resource_consumption = resource_consumption;
         this.production_resources = production_resources;
+
+        resources = new ConcurrentHashMap<ResourceType, Resource>() {{ // Cannot have anonymous inner class in order to be compliant with Java 8
+            put(ResourceType.CLAY, new Resource(ResourceType.CLAY, initial_resources_amount));
+            put(ResourceType.FOOD, new Resource(ResourceType.FOOD, initial_resources_amount));
+            put(ResourceType.STONE, new Resource(ResourceType.STONE, initial_resources_amount));
+            put(ResourceType.WOOD, new Resource(ResourceType.WOOD, initial_resources_amount));
+        }};
     }
 
      public void accountForNewTrade(Resource r){

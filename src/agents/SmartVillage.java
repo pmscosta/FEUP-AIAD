@@ -16,16 +16,8 @@ public class SmartVillage extends Village {
     private static final double OPTIMAL_SMART_RATIO_VALUE = 2.0;
     private static final int TARGET_SURVIVAL_TIME = 5;
 
-    SmartVillage(String name) {
-        super(name);
-    }
-
-    SmartVillage(String name, int resource_consumption) {
-        super(name, resource_consumption);
-    }
-
-    public SmartVillage(String name, int resource_consumption, List<Resource> production_resources) {
-        super(name, resource_consumption, production_resources);
+    public SmartVillage(String name, int initial_resources_amount, int resource_consumption, List<Resource> production_resources) {
+        super(name, initial_resources_amount, resource_consumption, production_resources);
 
         MIN_THRESHOLD = getResourceConsumption() * 2;
         // the minimum is threshold is the amount needed to survive two ticks

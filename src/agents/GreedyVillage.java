@@ -13,16 +13,8 @@ public class GreedyVillage extends Village {
     private static final double MAX_GREEDY_RATIO_VALUE = 2.0;
     private static final int TARGET_SURVIVAL_TIME = 5;
 
-    public GreedyVillage(String name) {
-        super(name);
-    }
-
-    public GreedyVillage(String name, int resource_consumption) {
-        super(name, resource_consumption);
-    }
-
-    public GreedyVillage(String name, int resource_consumption, List<Resource> production_resources) {
-        super(name, resource_consumption, production_resources);
+    public GreedyVillage(String name, int initial_resources_amount, int resource_consumption, List<Resource> production_resources) {
+        super(name, initial_resources_amount, resource_consumption, production_resources);
         villagesInfo.put(getVillageName(), "Greedy");
     }
 

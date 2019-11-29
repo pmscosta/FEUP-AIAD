@@ -14,16 +14,8 @@ public class PassiveVillage extends Village {
     // 10 ticks ,based on the village resource consumption rate
     private static final int TARGET_SURVIVAL_TIME = 10;
 
-    public PassiveVillage(String name) {
-        super(name);
-    }
-
-    public PassiveVillage(String name, int resource_consumption) {
-        super(name, resource_consumption);
-    }
-
-    public PassiveVillage(String name, int resource_consumption, List<Resource> production_resources) {
-        super(name, resource_consumption, production_resources);
+    public PassiveVillage(String name, int initial_resources_amount, int resource_consumption, List<Resource> production_resources) {
+        super(name, initial_resources_amount, resource_consumption, production_resources);
         villagesInfo.put(getVillageName(), "Passive");
     }
 

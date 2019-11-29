@@ -27,84 +27,102 @@ import java.util.List;
 public class Main {
 
     private static ContainerController mainContainer;
+    private static Document doc;
+
+
+    private static final String FILE_NAME = "input.xml";
+    private static final String[] village_types = { "passive", "greedy", "smart" };
 
     public static void main(String[] args) throws StaleProxyException, IOException, ParserConfigurationException, SAXException {
-        Runtime rt = Runtime.instance();
         java.lang.Runtime.getRuntime().addShutdownHook(new ShutdownHandler());
 
+        initContainer();
+        initDoc();
+        initVillages();
+        initAttacker();
+
+        TerminationScheduler.scheduleTermination(mainContainer);
+    }
+
+    private static final void initContainer() {
+        Runtime rt = Runtime.instance();
         Profile profile = new ProfileImpl();
         mainContainer = rt.createMainContainer(profile);
+    }
 
-        // Add village(s)
-        for (Village village : parseVillagesFile("experiments/experiment1.xml")) {
+    private static final void initDoc() throws ParserConfigurationException, IOException, SAXException {
+        File inputFile = new File(FILE_NAME);
+        DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+        doc = dBuilder.parse(inputFile);
+        doc.getDocumentElement().normalize();
+    }
+
+    private static final void initVillages() throws StaleProxyException {
+        for (String village_type : village_types) {
+            initVillage(village_type);
+        }
+    }
+
+    private static final void initVillage(String village_type) throws StaleProxyException {
+        Element village_element = (Element) doc.getElementsByTagName(String.format("%s_village", village_type)).item(0);
+        int quantity = getElementValue(village_element, "quantity");
+        for (int i = 1; i <= quantity; ++i) {
+            Village village = createVillage(village_element, village_type, i);
             Printer.safePrintf("Initiating Village '%s'", village.getVillageName());
             Logger.getInstance().add(
                     String.format("[Village Creation] Initiating Village %s\n", village.getVillageName())
             );
             mainContainer.acceptNewAgent(village.getVillageName(), village).start();
         }
+    }
+
+    private static final void initAttacker() throws StaleProxyException {
+        Element attacker_element = (Element) doc.getElementsByTagName("attacker").item(0);
+        int attacked_resources_percentage = getElementValue(attacker_element, "attacked_resources_percentage");
 
         // Add attacker
         Printer.safePrintf("\nInitiating Attacker\n");
         Logger.getInstance().add("[Attacker Creation] Initiating Attacker\n\n");
-        mainContainer.acceptNewAgent("attacker", new Attacker()).start();
-
-        TerminationScheduler.scheduleTermination(mainContainer);
+        mainContainer.acceptNewAgent("attacker", new Attacker(attacked_resources_percentage)).start();
     }
 
-    private static final LinkedList<Village> parseVillagesFile(String file_path) throws IOException, ParserConfigurationException, SAXException, StaleProxyException {
-        LinkedList<Village> villages = new LinkedList<>();
-        HashSet<String> village_names = new HashSet<>();
+    private static final Village createVillage(Element village_xml_element, String village_type, int id) {
+        int initial_resource_amounts = getElementValue(village_xml_element, "initial_resource_amounts");
+        int resource_consumption_rate = getElementValue(village_xml_element, "resource_consumption_rate");
 
-        File inputFile = new File(file_path);
-        DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-        Document doc = dBuilder.parse(inputFile);
-        doc.getDocumentElement().normalize();
-        NodeList village_nodes = doc.getElementsByTagName("village");
+        List<Resource> production_resources = new LinkedList<>();
+        production_resources.add(new Resource(Resource.ResourceType.CLAY, Integer.parseInt(village_xml_element.getElementsByTagName("clay_production_rate").item(0).getTextContent())));
+        production_resources.add(new Resource(Resource.ResourceType.FOOD, Integer.parseInt(village_xml_element.getElementsByTagName("food_production_rate").item(0).getTextContent())));
+        production_resources.add(new Resource(Resource.ResourceType.STONE, Integer.parseInt(village_xml_element.getElementsByTagName("stone_production_rate").item(0).getTextContent())));
+        production_resources.add(new Resource(Resource.ResourceType.WOOD, Integer.parseInt(village_xml_element.getElementsByTagName("wood_production_rate").item(0).getTextContent())));
 
-        for (int i = 0; i < village_nodes.getLength(); i++) {
-            Node village_node = village_nodes.item(i);
-
-            if (village_node.getNodeType() == Node.ELEMENT_NODE) {
-                Element village_element = (Element) village_node;
-
-                String name = village_element.getElementsByTagName("name").item(0).getTextContent();
-                if (village_names.contains(name)) {
-                    Printer.safePrintf("Repeated village name '%s'\n", name);
-                    mainContainer.kill();
-                    System.exit(1);
-                }
-                village_names.add(name);
-
-                String type = village_element.getElementsByTagName("type").item(0).getTextContent();
-                int consumption_rate = Integer.parseInt(
-                        village_element.getElementsByTagName("consumption_rate").item(0).getTextContent()
-                );
-
-                List<Resource> production_resources = new LinkedList<>();
-                production_resources.add(new Resource(Resource.ResourceType.CLAY, Integer.parseInt(village_element.getElementsByTagName("clay_production_rate").item(0).getTextContent())));
-                production_resources.add(new Resource(Resource.ResourceType.FOOD, Integer.parseInt(village_element.getElementsByTagName("food_production_rate").item(0).getTextContent())));
-                production_resources.add(new Resource(Resource.ResourceType.STONE, Integer.parseInt(village_element.getElementsByTagName("stone_production_rate").item(0).getTextContent())));
-                production_resources.add(new Resource(Resource.ResourceType.WOOD, Integer.parseInt(village_element.getElementsByTagName("wood_production_rate").item(0).getTextContent())));
-
-                switch (type) {
-                    case "Passive":
-                        villages.add(new PassiveVillage(name, consumption_rate, production_resources));
-                        break;
-                    case "Greedy":
-                        villages.add(new GreedyVillage(name, consumption_rate, production_resources));
-                        break;
-                    case "Smart":
-                        villages.add(new SmartVillage(name, consumption_rate, production_resources));
-                        break;
-                    default:
-                        break;
-                }
-            }
+        switch (village_type) {
+            case "passive":
+                return new PassiveVillage(
+                        String.format("%s%d", village_type, id),
+                        initial_resource_amounts,
+                        resource_consumption_rate,
+                        production_resources);
+            case "greedy":
+                return new GreedyVillage(
+                        String.format("%s%d", village_type, id),
+                        initial_resource_amounts,
+                        resource_consumption_rate,
+                        production_resources);
+            case "smart":
+                return new SmartVillage(
+                        String.format("%s%d", village_type, id),
+                        initial_resource_amounts,
+                        resource_consumption_rate,
+                        production_resources);
+            default:
+                return null;
         }
+    }
 
-        return villages;
+    private static final int getElementValue(Element element, String name) {
+        return Integer.parseInt(element.getElementsByTagName(name).item(0).getTextContent());
     }
 }
 

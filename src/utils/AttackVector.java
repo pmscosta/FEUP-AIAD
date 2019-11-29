@@ -4,13 +4,13 @@ import java.io.Serializable;
 import java.util.List;
 
 public class AttackVector implements Serializable {
-    private final List<Resource> vector;
+    private final int attacked_resources_percentage;
 
-    public AttackVector(List<Resource> vector) {
-        this.vector = vector;
+    public AttackVector(int attacked_resources_percentage) {
+        this.attacked_resources_percentage = attacked_resources_percentage;
     }
 
-    public List<Resource> getVector() {
-        return vector;
+    public int getVector() {
+        return attacked_resources_percentage;
     }
 }

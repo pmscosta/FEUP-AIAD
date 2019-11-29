@@ -29,10 +29,7 @@ public class AttackerBehaviour extends TickerBehaviour {
     }
 
     public AttackVector buildAttackVector() {
-        return new AttackVector(Arrays
-                .stream(ResourceType.values())
-                .map(resource_type -> new Resource(resource_type, ThreadLocalRandom.current().nextInt(MIN_STEAL_AMOUNT, MAX_STEAL_AMOUNT+1)))
-                .collect(Collectors.toList()));
+        return new AttackVector(attacker.getAttackedResourcesPercentage());
     }
 
     @Override
@@ -57,11 +54,8 @@ public class AttackerBehaviour extends TickerBehaviour {
             this.myAgent.send(msg);
 
             Logger.getInstance().add(String.format(
-                    "[Village Attacked] Attack Vector: [%s %s %s %s]\n",
-                    attack_vector.getVector().get(0),
-                    attack_vector.getVector().get(1),
-                    attack_vector.getVector().get(2),
-                    attack_vector.getVector().get(3)
+                    "[Attacker Attacking] Attacking with Attack Vector: [%d]\n",
+                    attack_vector.getVector()
             ));
         } catch (IOException e) {
             e.printStackTrace();

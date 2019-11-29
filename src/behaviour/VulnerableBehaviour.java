@@ -29,16 +29,14 @@ public class VulnerableBehaviour extends CyclicBehaviour {
                 AttackVector attack_vector = ((AttackVector) msg.getContentObject());
 
                 Logger.getInstance().add(String.format(
-                        "[Attack] Attack Vector: [%s %s %s %s]\n",
+                        "[Village Attacked] %s attacked with Attack Vector: [%d]\n",
                         village.getVillageName(),
-                        attack_vector.getVector().get(0),
-                        attack_vector.getVector().get(1),
-                        attack_vector.getVector().get(2),
-                        attack_vector.getVector().get(3)
+                        attack_vector.getVector()
                 ));
 
-                for (Resource attack : attack_vector.getVector()) {
-                    village.getResources().get(attack.getType()).consumeAmount(attack.getAmount());
+                for (Resource resource : village.getResources().values()) {
+                    int attacked_amount = (int) (resource.getAmount() * ((double) attack_vector.getVector() / 100.0));
+                    resource.consumeAmount(attacked_amount);
                 }
             } catch (UnreadableException e) {
                 e.printStackTrace();

@@ -7,6 +7,7 @@ public class ShutdownHandler extends Thread {
     public void run() {
         try {
             Logger.getInstance().writeLogToFile();
+            IndependentVariables.getInstance().export();
         } catch (IOException e) {
             System.out.println("Failed to write log to file.");
         }

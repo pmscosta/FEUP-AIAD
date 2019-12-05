@@ -1,8 +1,4 @@
-import agents.Attacker;
-import agents.GreedyVillage;
-import agents.PassiveVillage;
-import agents.SmartVillage;
-import agents.Village;
+import agents.*;
 import jade.core.Profile;
 import jade.core.ProfileImpl;
 import jade.core.Runtime;
@@ -37,8 +33,14 @@ public class Main {
         initDoc();
         initVillages();
         initAttacker();
+        initEconomy();
+
 
         TerminationScheduler.scheduleTermination(mainContainer);
+    }
+
+    private static final void initEconomy() throws StaleProxyException {
+        mainContainer.acceptNewAgent("economy", new EconomyAgent()).start();
     }
 
     private static final void initContainer() {

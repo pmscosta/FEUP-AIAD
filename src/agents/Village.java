@@ -5,11 +5,8 @@ import behaviour.HandleProposalBehaviour;
 import behaviour.LifeCycleBehaviour;
 import behaviour.VulnerableBehaviour;
 import exceptions.NotEnoughResources;
-import utils.Resource;
+import utils.*;
 import utils.Resource.ResourceType;
-import utils.Logger;
-import utils.ResourceRandomizer;
-import utils.Trade;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -159,6 +156,16 @@ public abstract class Village extends BaseAgent {
                     final_food_amount-initial_food_amount,
                     final_clay_amount-initial_clay_amount
                 ));
+
+        // Only update economy information in one side of the trade. Updating in both would cause duplication
+        if (is_proposer) {
+            Economy.tradeResources(
+                    Math.abs(final_stone_amount-initial_stone_amount) +
+                            Math.abs(final_wood_amount-initial_wood_amount) +
+                            Math.abs(final_food_amount-initial_food_amount) +
+                            Math.abs(final_clay_amount-initial_clay_amount)
+            );
+        }
 
         safePrintf("%s: As a %s, just did this trade:", getVillageName(), is_proposer ? "proposer" : "responder");
         safePrintf(t.toString());

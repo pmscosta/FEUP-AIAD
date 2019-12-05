@@ -31,9 +31,9 @@ public class Logger {
 
         total_ticks = tick_num;
 
-        int sum = resources.get(Resource.ResourceType.STONE).getAmount()+
-                resources.get(Resource.ResourceType.WOOD).getAmount()+
-                resources.get(Resource.ResourceType.FOOD).getAmount()+
+        int sum = resources.get(Resource.ResourceType.STONE).getAmount() +
+                resources.get(Resource.ResourceType.WOOD).getAmount() +
+                resources.get(Resource.ResourceType.FOOD).getAmount() +
                 resources.get(Resource.ResourceType.CLAY).getAmount();
 
         log.add(String.format(
@@ -44,13 +44,13 @@ public class Logger {
                 resources.get(Resource.ResourceType.WOOD).getAmount(),
                 resources.get(Resource.ResourceType.FOOD).getAmount(),
                 resources.get(Resource.ResourceType.CLAY).getAmount(),
-               sum
+                sum
         ));
 
 
-        if(resourcesEvolution.containsKey(village_name)){
+        if (resourcesEvolution.containsKey(village_name)) {
             resourcesEvolution.get(village_name).add(sum);
-        }else{
+        } else {
             ArrayList<Integer> list = new ArrayList<>();
             list.add(sum);
             resourcesEvolution.put(village_name, list);
@@ -67,20 +67,27 @@ public class Logger {
 
         BufferedWriter csvWriter = new BufferedWriter(new FileWriter("resources_evo.csv"));
 
+        BufferedWriter rapidMinerCsv = new BufferedWriter(new FileWriter("rapid_miner.csv", true));
+
         csvWriter.write("ticks, ");
-        for(int i = 0; i <= total_ticks; i++){
+        for (int i = 0; i <= total_ticks; i++) {
             csvWriter.write(i + ", ");
         }
+
         csvWriter.write("\n");
-        for(String village : resourcesEvolution.keySet()){
+        for (String village : resourcesEvolution.keySet()) {
             csvWriter.write(village + ", ");
-            for(Integer i : resourcesEvolution.get(village)) {
+            for (Integer i : resourcesEvolution.get(village)) {
                 csvWriter.write(i + ", ");
             }
-            csvWriter.write("\n");
         }
+        csvWriter.write("\n");
 
+        String rapid_miner_string = String.format("%s,%d\n", IndependentVariables.getInstance().exportString(), Economy.getLast());
+
+        rapidMinerCsv.write(rapid_miner_string);
         writer.close();
         csvWriter.close();
+        rapidMinerCsv.close();
     }
 }

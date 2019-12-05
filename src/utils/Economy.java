@@ -13,6 +13,10 @@ public class Economy {
         amount_traded_resources += amount;
     }
 
+    public static Integer getLast(){
+        return resources_record.get(resources_record.size()-1);
+    }
+
     public static void saveRecord() {
         resources_record.add(amount_traded_resources);
     }
@@ -21,7 +25,7 @@ public class Economy {
         return amount_traded_resources;
     }
 
-    public static ArrayList<Integer> getResourcesRecord() {
+    static ArrayList<Integer> getResourcesRecord() {
         return resources_record;
     }
 }

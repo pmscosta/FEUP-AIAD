@@ -43,6 +43,37 @@ public class IndependentVariables {
         return instance;
     }
 
+    public String exportString() {
+        return  String.format("%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d",
+                passive_num_villages,
+                greedy_num_villages,
+                smart_num_villages,
+
+                passive_init_resources,
+                greedy_init_resources,
+                smart_init_resources,
+
+                passive_resource_consumption,
+                greedy_resource_consumption,
+                smart_resource_consumption,
+
+                passive_clay_production,
+                passive_food_production,
+                passive_stone_production,
+                passive_wood_production,
+                greedy_clay_production,
+                greedy_food_production,
+                greedy_stone_production,
+                greedy_wood_production,
+                smart_clay_production,
+                smart_food_production,
+                smart_stone_production,
+                smart_wood_production,
+
+                attacker_attack_percentage
+        );
+    }
+
     public void export() throws IOException {
         BufferedWriter writer = new BufferedWriter(new FileWriter("independent_variables.csv"));
 

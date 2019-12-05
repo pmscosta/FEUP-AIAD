@@ -15,9 +15,6 @@ public final class TerminationScheduler {
                         try {
                             container.kill();
                             Printer.safePrintf("\n\nTerminating execution ...\n");
-                            for (Integer i : Economy.getResourcesRecord()) {
-                                Printer.safePrintf("%d\n", i);
-                            }
                             System.exit(0);
                         } catch (StaleProxyException e) {
                             e.printStackTrace();

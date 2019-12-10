@@ -14,6 +14,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -30,9 +31,8 @@ public class Main {
         java.lang.Runtime.getRuntime().addShutdownHook(new ShutdownHandler());
 
         initContainer();
-        initDoc();
-        initVillages();
-        initAttacker();
+        initVillages(args);
+        initAttacker(Integer.parseInt(args[21]));
         initEconomy();
 
 
@@ -57,17 +57,53 @@ public class Main {
         doc.getDocumentElement().normalize();
     }
 
-    private static final void initVillages() throws StaleProxyException {
+    private static final void initVillages(String[] args) throws StaleProxyException {
+        ArrayList<Integer> passiveInfo = new ArrayList<Integer>();
+        ArrayList<Integer> greedyInfo = new ArrayList<Integer>();
+        ArrayList<Integer> smartInfo = new ArrayList<Integer>();
+
+        for(int i = 0; i < 3; i++) {
+            for (int j = 0; j < 7; j++) {
+                switch (i){
+                    case 0:
+                        passiveInfo.add(Integer.parseInt(args[j+i*7]));
+                        break;
+                    case 1:
+                        greedyInfo.add(Integer.parseInt(args[j+i*7]));
+                        break;
+                    case 2:
+                        smartInfo.add(Integer.parseInt(args[j+i*7]));
+                        break;
+                        default:
+                            break;
+                }
+            }
+        }
+
         for (String village_type : village_types) {
-            initVillage(village_type);
+            switch (village_type){
+                case "passive":
+                    System.out.println("Initiating Passive Villages");
+                    initVillage(village_type, passiveInfo);
+                    break;
+                case "greedy":
+                    System.out.println("Initiating Greedy Villages");
+                    initVillage(village_type, greedyInfo);
+                    break;
+                case "smart":
+                    System.out.println("Initiating Smart Villages");
+                    initVillage(village_type, smartInfo);
+                    break;
+                    default:
+                        break;
+            }
         }
     }
 
-    private static final void initVillage(String village_type) throws StaleProxyException {
-        Element village_element = (Element) doc.getElementsByTagName(String.format("%s_village", village_type)).item(0);
-        int quantity = getElementValue(village_element, "quantity");
+    private static final void initVillage(String village_type, ArrayList<Integer> values) throws StaleProxyException {
+        int quantity = values.get(0);
         for (int i = 1; i <= quantity; ++i) {
-            Village village = createVillage(village_element, village_type, i);
+            Village village = createVillage(values, village_type, i);
             Printer.safePrintf("Initiating Village '%s'", village.getVillageName());
             Logger.getInstance().add(
                     String.format("[Village Creation] Initiating Village %s\n", village.getVillageName())
@@ -88,26 +124,23 @@ public class Main {
         }
     }
 
-    private static final void initAttacker() throws StaleProxyException {
-        Element attacker_element = (Element) doc.getElementsByTagName("attacker").item(0);
-        int attacked_resources_percentage = getElementValue(attacker_element, "attacked_resources_percentage");
-
+    private static final void initAttacker(int val) throws StaleProxyException {
         // Add attacker
         Printer.safePrintf("\nInitiating Attacker\n");
         Logger.getInstance().add("[Attacker Creation] Initiating Attacker\n\n");
-        mainContainer.acceptNewAgent("attacker", new Attacker(attacked_resources_percentage)).start();
-        IndependentVariables.getInstance().attacker_attack_percentage = attacked_resources_percentage;
+        mainContainer.acceptNewAgent("attacker", new Attacker(val)).start();
+        IndependentVariables.getInstance().attacker_attack_percentage = val;
     }
 
-    private static final Village createVillage(Element village_xml_element, String village_type, int id) {
-        int initial_resource_amounts = getElementValue(village_xml_element, "initial_resource_amounts");
-        int resource_consumption_rate = getElementValue(village_xml_element, "resource_consumption_rate");
+    private static final Village createVillage(ArrayList<Integer> values, String village_type, int id) {
+        int initial_resource_amounts = values.get(1);
+        int resource_consumption_rate = values.get(2);
 
         List<Resource> production_resources = new LinkedList<>();
-        production_resources.add(new Resource(Resource.ResourceType.CLAY, Integer.parseInt(village_xml_element.getElementsByTagName("clay_production_rate").item(0).getTextContent())));
-        production_resources.add(new Resource(Resource.ResourceType.FOOD, Integer.parseInt(village_xml_element.getElementsByTagName("food_production_rate").item(0).getTextContent())));
-        production_resources.add(new Resource(Resource.ResourceType.STONE, Integer.parseInt(village_xml_element.getElementsByTagName("stone_production_rate").item(0).getTextContent())));
-        production_resources.add(new Resource(Resource.ResourceType.WOOD, Integer.parseInt(village_xml_element.getElementsByTagName("wood_production_rate").item(0).getTextContent())));
+        production_resources.add(new Resource(Resource.ResourceType.CLAY,values.get(3)));
+        production_resources.add(new Resource(Resource.ResourceType.FOOD, values.get(4)));
+        production_resources.add(new Resource(Resource.ResourceType.STONE, values.get(5)));
+        production_resources.add(new Resource(Resource.ResourceType.WOOD, values.get(6)));
 
         switch (village_type) {
             case "passive":
@@ -151,8 +184,5 @@ public class Main {
         }
     }
 
-    private static final int getElementValue(Element element, String name) {
-        return Integer.parseInt(element.getElementsByTagName(name).item(0).getTextContent());
-    }
 }
 

@@ -13,17 +13,17 @@ const VILLAGE_NR_MIN = 1;
 const VILLAGE_NR_MAX = 3;
 const VILLAGE_NR_STEP = 1;
 
-const INIT_RESOURCE_MIN = 200;
-const INIT_RESOURCE_MAX = 200;
-const INIT_RESOURCE_STEP = 100;
+const INIT_RESOURCE_MIN = 60;
+const INIT_RESOURCE_MAX = 60;
+const INIT_RESOURCE_STEP = 10;
 
-const CONSUMPTION_RATE_MIN = 200;
-const CONSUMPTION_RATE_MAX = 200;
-const CONSUMPTION_RATE_STEP = 100;
+const CONSUMPTION_RATE_MIN = 5;
+const CONSUMPTION_RATE_MAX = 5;
+const CONSUMPTION_RATE_STEP = 1;
 
-const PROD_RATE_MIN = 150;
-const PROD_RATE_MAX = 250;
-const PROD_RATE_STEP = 50;
+const PROD_RATE_MIN = 7;
+const PROD_RATE_MAX = 7;
+const PROD_RATE_STEP = 2;
 
 const ATTACKER_STEAL_PERCENT = 5;
 
@@ -51,7 +51,7 @@ for (let consumption_rate_smart = CONSUMPTION_RATE_MIN; consumption_rate_smart <
     production_greedy[greedy_null_prod_resource_idx] = 0;
     const production_smart = new Array(4).fill(production_rate_smart);
     production_smart[smart_null_prod_resource_idx] = 0;
-
+    
     if (
         (passive_nr + greedy_nr + smart_nr) < 1 ||
         invalidProduction(production_passive, consumption_rate_passive) ||

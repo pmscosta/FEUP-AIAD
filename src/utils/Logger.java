@@ -13,6 +13,8 @@ public class Logger {
     HashMap<String, ArrayList<Integer>> resourcesEvolution = new HashMap<>();
     private int total_ticks;
 
+    public static String rapidminer_csv_file = "rapidminer_output_data.csv";
+
     private Logger() {
     }
 
@@ -67,7 +69,7 @@ public class Logger {
 
         // BufferedWriter csvWriter = new BufferedWriter(new FileWriter("resources_evo.csv"));
 
-        BufferedWriter rapidMinerCsv = new BufferedWriter(new FileWriter("rapidminer_output_data.csv", true));
+        BufferedWriter rapidMinerCsv = new BufferedWriter(new FileWriter(Logger.rapidminer_csv_file, true));
 
         // csvWriter.write("ticks, ");
         // for (int i = 0; i <= total_ticks; i++) {

@@ -27,6 +27,8 @@ const PROD_RATE_STEP = 2;
 
 const ATTACKER_STEAL_PERCENT = 5;
 
+const GENERATED_CSV = "rapidminer_output_data.csv";
+
 let n_runs = 0;
 
 for (let passive_nr = VILLAGE_NR_MIN; passive_nr <= VILLAGE_NR_MAX; passive_nr += VILLAGE_NR_STEP)
@@ -68,6 +70,7 @@ for (let consumption_rate_smart = CONSUMPTION_RATE_MIN; consumption_rate_smart <
         greedy_nr, init_resource_greedy, consumption_rate_greedy, ...production_greedy,
         smart_nr, init_resource_smart, consumption_rate_smart, ...production_smart,
         ATTACKER_STEAL_PERCENT,
+        GENERATED_CSV,
     ];
 
     console.log(`Running #${n_runs}`);

@@ -37,6 +37,11 @@ public class Main {
 
 
         TerminationScheduler.scheduleTermination(mainContainer);
+
+        // Just getting the csv file if it is given
+        if (args.length >= 23) {
+            Logger.rapidminer_csv_file = args[22];
+        }
     }
 
     private static final void initEconomy() throws StaleProxyException {
@@ -185,4 +190,3 @@ public class Main {
     }
 
 }
-

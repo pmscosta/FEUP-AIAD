@@ -9,25 +9,25 @@ const invalidProduction = ([clay_prod, food_prod, stone_prod, wood_prod], consum
         (Math.max(clay_prod, food_prod, stone_prod, wood_prod) <= consumption_rate);
 }
 
-const VILLAGE_NR_MIN = 1;
-const VILLAGE_NR_MAX = 3;
-const VILLAGE_NR_STEP = 1;
+const VILLAGE_NR_MIN = process.env.VILLAGE_NR_MIN || 1;
+const VILLAGE_NR_MAX = process.env.VILLAGE_NR_MAX || 3;
+const VILLAGE_NR_STEP = process.env.VILLAGE_NR_STEP || 1;
 
-const INIT_RESOURCE_MIN = 60;
-const INIT_RESOURCE_MAX = 60;
-const INIT_RESOURCE_STEP = 10;
+const INIT_RESOURCE_MIN = process.env.INIT_RESOURCE_MIN || 60;
+const INIT_RESOURCE_MAX = process.env.INIT_RESOURCE_MAX || 60;
+const INIT_RESOURCE_STEP = process.env.INIT_RESOURCE_STEP || 10;
 
-const CONSUMPTION_RATE_MIN = 5;
-const CONSUMPTION_RATE_MAX = 5;
-const CONSUMPTION_RATE_STEP = 1;
+const CONSUMPTION_RATE_MIN = process.env.CONSUMPTION_RATE_MIN || 5;
+const CONSUMPTION_RATE_MAX = process.env.CONSUMPTION_RATE_MAX || 5;
+const CONSUMPTION_RATE_STEP = process.env.CONSUMPTION_RATE_STEP || 1;
 
-const PROD_RATE_MIN = 7;
-const PROD_RATE_MAX = 7;
-const PROD_RATE_STEP = 2;
+const PROD_RATE_MIN = process.env.PROD_RATE_MIN || 7;
+const PROD_RATE_MAX = process.env.PROD_RATE_MAX || 7;
+const PROD_RATE_STEP = process.env.PROD_RATE_STEP || 1;
 
-const ATTACKER_STEAL_PERCENT = 5;
+const ATTACKER_STEAL_PERCENT = process.env.ATTACKER_STEAL_PERCENT || 5;
 
-const GENERATED_CSV = "rapidminer_output_data.csv";
+const GENERATED_CSV = process.env.GENERATED_CSV || "rapidminer_output_data.csv";
 
 let n_runs = 0;
 

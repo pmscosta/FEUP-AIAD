@@ -1,0 +1,21 @@
+rapidminer_miguel-xps-1.csv:
+master mas:
+VILLAGE_NR_MIN=2
+VILLAGE_NR_MAX=4
+INIT_RESOURCE_MIN=75
+INIT_RESOURCE_MAX=75
+PROD_RATE_MIN=8
+PROD_RATE_MAX=8
+
+O resto mantém-se igual
+
+rapidminer_miguel-xps-2.csv:
+master mas:
+VILLAGE_NR_MIN=2
+VILLAGE_NR_MAX=4
+INIT_RESOURCE_MIN=75
+INIT_RESOURCE_MAX=75
+PROD_RATE_MIN=9
+PROD_RATE_MAX=9
+
+O resto mantém-se igual

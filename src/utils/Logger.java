@@ -65,29 +65,29 @@ public class Logger {
             writer.write(entry);
         }
 
-        BufferedWriter csvWriter = new BufferedWriter(new FileWriter("resources_evo.csv"));
+        // BufferedWriter csvWriter = new BufferedWriter(new FileWriter("resources_evo.csv"));
 
-        BufferedWriter rapidMinerCsv = new BufferedWriter(new FileWriter("rapid_miner.csv", true));
+        BufferedWriter rapidMinerCsv = new BufferedWriter(new FileWriter("rapidminer_output_data.csv", true));
 
-        csvWriter.write("ticks, ");
-        for (int i = 0; i <= total_ticks; i++) {
-            csvWriter.write(i + ", ");
-        }
+        // csvWriter.write("ticks, ");
+        // for (int i = 0; i <= total_ticks; i++) {
+        //     csvWriter.write(i + ", ");
+        // }
 
-        csvWriter.write("\n");
-        for (String village : resourcesEvolution.keySet()) {
-            csvWriter.write(village + ", ");
-            for (Integer i : resourcesEvolution.get(village)) {
-                csvWriter.write(i + ", ");
-            }
-        }
-        csvWriter.write("\n");
+        // csvWriter.write("\n");
+        // for (String village : resourcesEvolution.keySet()) {
+        //     csvWriter.write(village + ", ");
+        //     for (Integer i : resourcesEvolution.get(village)) {
+        //         csvWriter.write(i + ", ");
+        //     }
+        // }
+        // csvWriter.write("\n");
 
         String rapid_miner_string = String.format("%s,%d\n", IndependentVariables.getInstance().exportString(), Economy.getLast());
 
         rapidMinerCsv.write(rapid_miner_string);
         writer.close();
-        csvWriter.close();
+        // csvWriter.close();
         rapidMinerCsv.close();
     }
 }

@@ -7,7 +7,7 @@ import static behaviour.TimeTickerBehaviour.DEFAULT_TIME;
 
 public final class TerminationScheduler {
 
-    private static final int TIME_TO_TERMINATION_MS = ((10+1)*DEFAULT_TIME);
+    private static final int TIME_TO_TERMINATION_MS = ((30+1)*DEFAULT_TIME);
 
     public static final void scheduleTermination(ContainerController container) {
         new java.util.Timer().schedule(

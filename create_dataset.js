@@ -25,6 +25,8 @@ const PROD_RATE_MIN = 150;
 const PROD_RATE_MAX = 250;
 const PROD_RATE_STEP = 50;
 
+const ATTACKER_STEAL_PERCENT = 5;
+
 let n_runs = 0;
 
 for (let passive_nr = VILLAGE_NR_MIN; passive_nr <= VILLAGE_NR_MAX; passive_nr += VILLAGE_NR_STEP)
@@ -65,6 +67,7 @@ for (let consumption_rate_smart = CONSUMPTION_RATE_MIN; consumption_rate_smart <
         passive_nr, init_resource_passive, consumption_rate_passive, ...production_passive,
         greedy_nr, init_resource_greedy, consumption_rate_greedy, ...production_greedy,
         smart_nr, init_resource_smart, consumption_rate_smart, ...production_smart,
+        ATTACKER_STEAL_PERCENT,
     ];
 
     console.log(`Running #${n_runs}`);

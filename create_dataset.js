@@ -1,6 +1,7 @@
 const execSync = require('child_process').execSync;
 
 const run = (args) => {
+    // execSync(`java -cp compiled:lib/jade.jar Main ${args.join(" ")}`, {stdio: 'inherit'});
     execSync(`java -cp compiled:lib/jade.jar Main ${args.join(" ")}`);
 }
 
@@ -28,6 +29,8 @@ const PROD_RATE_STEP = parseInt(process.env.PROD_RATE_STEP) || 1;
 const ATTACKER_STEAL_PERCENT = parseInt(process.env.ATTACKER_STEAL_PERCENT) || 5;
 
 const GENERATED_CSV = process.env.GENERATED_CSV || "rapidminer_output_data.csv";
+
+const START_ITER = parseInt(process.env.START_ITER) || 0;
 
 let n_runs = 0;
 
@@ -64,6 +67,10 @@ for (let consumption_rate_smart = CONSUMPTION_RATE_MIN; consumption_rate_smart <
     }
 
     n_runs++;
+
+    if (n_runs < START_ITER) {
+        continue;
+    }
 
     const params = [
         passive_nr, init_resource_passive, consumption_rate_passive, ...production_passive,

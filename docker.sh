@@ -21,3 +21,7 @@ docker run --rm -v "$(pwd)/$GENERATED_CSV:/aiad/$GENERATED_CSV" --name "$CONTAIN
 # GENERATED_CSV=rapidminer_miguel-xps-1.csv ./docker.sh miguel-xps-1 -e VILLAGE_NR_MIN=2 -e VILLAGE_NR_MAX=4 -e INIT_RESOURCE_MIN=75 -e INIT_RESOURCE_MAX=75 -e PROD_RATE_MIN=8 -e PROD_RATE_MAX=8
 # AIAD miguel-xps 2:
 # GENERATED_CSV=rapidminer_miguel-xps-2.csv ./docker.sh miguel-xps-2 -e VILLAGE_NR_MIN=2 -e VILLAGE_NR_MAX=4 -e INIT_RESOURCE_MIN=75 -e INIT_RESOURCE_MAX=75 -e PROD_RATE_MIN=9 -e PROD_RATE_MAX=9
+# AIAD miguel-xps 3:
+# GENERATED_CSV=rapidminer_miguel-xps-3.csv ./docker.sh miguel-xps-3 -e VILLAGE_NR_MIN=3 -e VILLAGE_NR_MAX=5 -e INIT_RESOURCE_MIN=55 -e INIT_RESOURCE_MAX=55
+# AIAD miguel-xps 4:
+# GENERATED_CSV=rapidminer_miguel-xps-4.csv ./docker.sh miguel-xps-4 -e VILLAGE_NR_MIN=3 -e VILLAGE_NR_MAX=5 -e INIT_RESOURCE_MIN=95 -e INIT_RESOURCE_MAX=95 -e PROD_RATE_MIN=8 -e PROD_RATE_MAX=8

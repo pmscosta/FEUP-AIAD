@@ -80,9 +80,9 @@ for (let consumption_rate_smart = CONSUMPTION_RATE_MIN; consumption_rate_smart <
         GENERATED_CSV,
     ];
 
-    console.log(`Running #${n_runs}`);
+    console.log(`--->>> Running #${n_runs}`);
     run(params);
-    console.log(`Ran #${n_runs}`);
+    console.log(`--->>> Ran #${n_runs}`);
 }
 
 console.log(`Did ${n_runs} runs`);

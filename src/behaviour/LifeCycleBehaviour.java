@@ -2,6 +2,7 @@ package behaviour;
 
 import agents.Village;
 import exceptions.NotEnoughResources;
+import utils.Economy;
 import utils.Resource;
 import utils.Logger;
 
@@ -22,6 +23,7 @@ public class LifeCycleBehaviour extends TimeTickerBehaviour {
                 safePrintf("\t\t*** %s TERMINATED [%s] ***", village.getVillageName(), e.toString());
                 //remove it from the info board
                 Village.villagesInfo.remove(village.getVillageName());
+                Economy.terminateVillage();
                 this.village.doDelete();
             }
         }

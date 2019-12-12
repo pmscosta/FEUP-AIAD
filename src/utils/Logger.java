@@ -70,6 +70,7 @@ public class Logger {
         // BufferedWriter csvWriter = new BufferedWriter(new FileWriter("resources_evo.csv"));
 
         BufferedWriter rapidMinerCsv = new BufferedWriter(new FileWriter(Logger.rapidminer_csv_file, true));
+        BufferedWriter rapidMinerCsvClassif = new BufferedWriter(new FileWriter("CLASSIFICATION-" + Logger.rapidminer_csv_file, true));
 
         // csvWriter.write("ticks, ");
         // for (int i = 0; i <= total_ticks; i++) {
@@ -86,10 +87,13 @@ public class Logger {
         // csvWriter.write("\n");
 
         String rapid_miner_string = String.format("%s,%d\n", IndependentVariables.getInstance().exportString(), Economy.getLast());
+        String rapid_miner_classif_string = String.format("%s,%d\n", IndependentVariables.getInstance().exportString(), Economy.getPercentageOfLivingVillages());
 
         rapidMinerCsv.write(rapid_miner_string);
+        rapidMinerCsvClassif.write(rapid_miner_classif_string);
         writer.close();
         // csvWriter.close();
         rapidMinerCsv.close();
+        rapidMinerCsvClassif.close();
     }
 }

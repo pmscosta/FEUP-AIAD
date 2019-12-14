@@ -1,12 +1,14 @@
 const fs = require("fs");
 
+const OUTLIER_BOUND = 4000;
+
 const readFile = (file_name) => (
     fs.readFileSync(file_name).toString().split("\n")
 );
 
 if (process.argv.length < 3) {
     console.error("Not enough arguments.\n");
-    console.error("usage: node classif_parser.js <input_file>\n");
+    console.error("usage: node classif_parser.js <input_file> <is_classification (optional)>\n");
     process.exit(1);
 }
 
@@ -31,38 +33,39 @@ const counts = {
     "75-100": 0,
 };
 
-const outputed_counts = { ...counts };
 const dups = {};
-const no_dups_data = [];
-const output = [];
 
 const file_name = process.argv[2];
+const is_classification = process.argv[3];
 const data = readFile(file_name);
+
+const statistics = {
+    num_entries: data.length,
+    num_duplicate_entries: 0,
+    num_outliers: 0,
+}
+
+if (is_classification) {
+    statistics.classes = counts;
+}
 
 data.forEach((entry) => {
     const percentage = entry.split(",").pop();
 
+    if (!is_classification && percentage > OUTLIER_BOUND) {
+        statistics.num_outliers++;
+    }
+
     if (dups[entry]) {
+        statistics.num_duplicate_entries++;
         return;
     }
-    no_dups_data.push(entry);
     dups[entry] = true;
 
-    const percentage_class = getClass(percentage);
-    counts[percentage_class]++;
-});
-
-const min = Math.min(...Object.values(counts));
-
-no_dups_data.forEach((entry) => {
-    const percentage = entry.split(",").pop();
-
-    const percentage_class = getClass(percentage);
-
-    if (outputed_counts[percentage_class] < min) {
-        outputed_counts[percentage_class]++;
-        output.push(entry);
+    if (is_classification) {
+        const percentage_class = getClass(percentage);
+        counts[percentage_class]++;
     }
 });
 
-console.log(output.join("\n"));
+console.log(JSON.stringify(statistics, null, 2));
